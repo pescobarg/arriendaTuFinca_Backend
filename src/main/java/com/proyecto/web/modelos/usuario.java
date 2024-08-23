@@ -30,11 +30,14 @@ public class usuario {
     @Column(nullable = false, unique = true)
     private String correo;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private int edad;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private int tipoUsuario;
+
+    @Column(nullable = false)
+    private String comentarios;
 
 
 }

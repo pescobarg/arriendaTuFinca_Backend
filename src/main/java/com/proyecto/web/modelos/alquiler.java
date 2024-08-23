@@ -24,10 +24,10 @@ public class alquiler {
     private Long id;
 
     @Column(nullable = false)
-    private Long usuarioId; // ID del usuario
+    private Long usuarioId; 
 
     @Column(nullable = false)
-    private Long propiedadId; // ID de la propiedad
+    private Long propiedadId; 
 
     @Column(nullable = false)
     private LocalDate fechaInicio;
