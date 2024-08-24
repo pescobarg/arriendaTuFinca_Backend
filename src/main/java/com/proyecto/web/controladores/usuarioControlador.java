@@ -1,8 +1,7 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.modelos.usuario;
+import com.proyecto.web.dtos.usuarioDTO;
 import com.proyecto.web.servicios.usuarioServicio;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,33 +10,33 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class usuarioControlador {
 
     @Autowired
     private usuarioServicio usuarioServicio;
 
     @GetMapping
-    public List<usuario> getUsuarios() {
+    public List<usuarioDTO> getUsuarios() {
         return usuarioServicio.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<usuario> getUsuarioPorId(@PathVariable Long id) {
-        Optional<usuario> usuario = usuarioServicio.findById(id);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<usuarioDTO> getUsuarioPorId(@PathVariable Long id) {
+        Optional<usuarioDTO> usuarioDTO = usuarioServicio.findById(id);
+        return usuarioDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public usuario crearUsuario(@RequestBody usuario usuario) {
-        return usuarioServicio.save(usuario);
+    public usuarioDTO crearUsuario(@RequestBody usuarioDTO usuarioDTO) {
+        return usuarioServicio.save(usuarioDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<usuario> actualizarUsuario(@PathVariable Long id, @RequestBody usuario usuario) {
+    public ResponseEntity<usuarioDTO> actualizarUsuario(@PathVariable Long id, @RequestBody usuarioDTO usuarioDTO) {
         if (usuarioServicio.findById(id).isPresent()) {
-            usuario.setId(id);
-            return ResponseEntity.ok(usuarioServicio.save(usuario));
+            usuarioDTO.setId(id);
+            return ResponseEntity.ok(usuarioServicio.save(usuarioDTO));
         } else {
             return ResponseEntity.notFound().build();
         }

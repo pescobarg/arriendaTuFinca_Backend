@@ -1,13 +1,15 @@
 package com.proyecto.web.servicios;
 
+import com.proyecto.web.dtos.usuarioDTO;
 import com.proyecto.web.modelos.usuario;
 import com.proyecto.web.repositorios.usuarioRepositorio;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class usuarioServicio {
@@ -15,19 +17,35 @@ public class usuarioServicio {
     @Autowired
     private usuarioRepositorio usuarioRepo;
 
-    public List<usuario> findAll() {
-        return usuarioRepo.findAll();
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public List<usuarioDTO> findAll() {
+        return usuarioRepo.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    public Optional<usuario> findById(Long id) {
-        return usuarioRepo.findById(id);
+    public Optional<usuarioDTO> findById(Long id) {
+        return usuarioRepo.findById(id)
+                .map(this::convertToDto);
     }
 
-    public usuario save(usuario usuario) {
-        return usuarioRepo.save(usuario);
+    public usuarioDTO save(usuarioDTO usuarioDTO) {
+        usuario usuario = convertToEntity(usuarioDTO);
+        usuario savedUsuario = usuarioRepo.save(usuario);
+        return convertToDto(savedUsuario);
     }
 
     public void deleteById(Long id) {
         usuarioRepo.deleteById(id);
+    }
+
+    private usuarioDTO convertToDto(usuario usuario) {
+        return modelMapper.map(usuario, usuarioDTO.class);
+    }
+
+    private usuario convertToEntity(usuarioDTO usuarioDTO) {
+        return modelMapper.map(usuarioDTO, usuario.class);
     }
 }

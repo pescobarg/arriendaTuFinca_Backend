@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +33,15 @@ public class usuario {
     private String correo;
 
     @Column(nullable = false)
-    private int edad;
+    private String contrasenia;
 
     @Column(nullable = false)
-    private int tipoUsuario;
+    private int edad;
+
+    @Enumerated(EnumType.STRING) 
+    @Column(nullable = false)
+    private TipoUsuario tipoUsuario;
 
     @Column(nullable = false)
     private String comentarios;
-
-
 }

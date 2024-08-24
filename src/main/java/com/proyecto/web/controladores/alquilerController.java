@@ -1,6 +1,6 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.modelos.alquiler;
+import com.proyecto.web.dtos.alquilerDTO;
 import com.proyecto.web.servicios.alquilerServicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,43 +11,43 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/alquileres")
+@RequestMapping("/api/alquileres")
 public class alquilerController {
 
     @Autowired
     private alquilerServicio alquilerServicio;
 
     @GetMapping
-    public List<alquiler> getAllAlquileres() {
+    public List<alquilerDTO> getAllAlquileres() {
         return alquilerServicio.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<alquiler> getAlquilerPorId(@PathVariable Long id) {
-        Optional<alquiler> alquiler = alquilerServicio.findById(id);
+    public ResponseEntity<alquilerDTO> getAlquilerPorId(@PathVariable Long id) {
+        Optional<alquilerDTO> alquiler = alquilerServicio.findById(id);
         return alquiler.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<alquiler> getAlquileresPorUsuario(@PathVariable Long usuarioId) {
+    public List<alquilerDTO> getAlquileresPorUsuario(@PathVariable Long usuarioId) {
         return alquilerServicio.findByUsuarioId(usuarioId);
     }
 
     @GetMapping("/propiedad/{propiedadId}")
-    public List<alquiler> getAlquileresPorPropiedad(@PathVariable Long propiedadId) {
+    public List<alquilerDTO> getAlquileresPorPropiedad(@PathVariable Long propiedadId) {
         return alquilerServicio.findByPropiedadId(propiedadId);
     }
 
     @PostMapping
-    public alquiler crearAlquiler(@RequestBody alquiler alquiler) {
-        return alquilerServicio.save(alquiler);
+    public alquilerDTO crearAlquiler(@RequestBody alquilerDTO alquilerDTO) {
+        return alquilerServicio.save(alquilerDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<alquiler> actualizarAlquiler(@PathVariable Long id, @RequestBody alquiler alquiler) {
+    public ResponseEntity<alquilerDTO> actualizarAlquiler(@PathVariable Long id, @RequestBody alquilerDTO alquilerDTO) {
         if (alquilerServicio.findById(id).isPresent()) {
-            alquiler.setId(id);
-            return ResponseEntity.ok(alquilerServicio.save(alquiler));
+            alquilerDTO.setId(id);
+            return ResponseEntity.ok(alquilerServicio.save(alquilerDTO));
         } else {
             return ResponseEntity.notFound().build();
         }

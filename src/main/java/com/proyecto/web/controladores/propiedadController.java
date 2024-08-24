@@ -1,8 +1,7 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.modelos.propiedad;
+import com.proyecto.web.dtos.propiedadDTO;
 import com.proyecto.web.servicios.propiedadServicio;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,33 +10,33 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/propiedades")
+@RequestMapping("/api/propiedades")
 public class propiedadController {
 
     @Autowired
     private propiedadServicio propiedadServicio;
 
     @GetMapping
-    public List<propiedad> getPropiedades() {
+    public List<propiedadDTO> getPropiedades() {
         return propiedadServicio.getPropiedades();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<propiedad> getPropiedadPorId(@PathVariable Long id) {
-        Optional<propiedad> propiedad = propiedadServicio.encontrarPropiedadPorId(id);
-        return propiedad.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<propiedadDTO> getPropiedadPorId(@PathVariable Long id) {
+        Optional<propiedadDTO> propiedadDTO = propiedadServicio.encontrarPropiedadPorId(id);
+        return propiedadDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public propiedad crearPropiedad(@RequestBody propiedad propiedad) {
-        return propiedadServicio.guardar(propiedad);
+    public propiedadDTO crearPropiedad(@RequestBody propiedadDTO propiedadDTO) {
+        return propiedadServicio.guardar(propiedadDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<propiedad> actualizarPropiedad(@PathVariable Long id, @RequestBody propiedad propiedad) {
+    public ResponseEntity<propiedadDTO> actualizarPropiedad(@PathVariable Long id, @RequestBody propiedadDTO propiedadDTO) {
         if (propiedadServicio.encontrarPropiedadPorId(id).isPresent()) {
-            propiedad.setId(id);
-            return ResponseEntity.ok(propiedadServicio.guardar(propiedad));
+            propiedadDTO.setId(id);
+            return ResponseEntity.ok(propiedadServicio.guardar(propiedadDTO));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -54,7 +53,7 @@ public class propiedadController {
     }
 
     @GetMapping("/usuario/{propietarioId}")
-    public List<propiedad> getPropiedadPorUsuario(@PathVariable Long propietarioId) {
+    public List<propiedadDTO> getPropiedadPorUsuario(@PathVariable Long propietarioId) {
         return propiedadServicio.getPropiedadPorUsuario(propietarioId);
     }
 }
