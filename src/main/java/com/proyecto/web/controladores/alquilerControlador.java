@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/alquileres")
-public class alquilerController {
+@RequestMapping("/alquileres")
+public class alquilerControlador {
 
     @Autowired
     private alquilerServicio alquilerServicio;
