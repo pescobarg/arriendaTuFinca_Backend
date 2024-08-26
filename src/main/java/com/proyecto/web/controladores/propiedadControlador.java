@@ -39,7 +39,7 @@ public class propiedadControlador {
             propiedadDTO.setId(id);
             return ResponseEntity.ok(propiedadServicio.guardar(propiedadDTO));
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFound("Not found property with id = " + id);
         }
     }
 
@@ -49,7 +49,7 @@ public class propiedadControlador {
             propiedadServicio.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFound("Not found property with id = " + id);
         }
     }
 

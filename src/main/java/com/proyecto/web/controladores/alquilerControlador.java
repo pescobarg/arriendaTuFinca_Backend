@@ -50,7 +50,7 @@ public class alquilerControlador {
             alquilerDTO.setId(id);
             return ResponseEntity.ok(alquilerServicio.save(alquilerDTO));
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFound("Not found rent with id = " + id);
         }
     }
 
@@ -60,7 +60,7 @@ public class alquilerControlador {
             alquilerServicio.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFound("Not found rent with id = " + id);
         }
     }
 }
