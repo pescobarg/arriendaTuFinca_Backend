@@ -33,6 +33,9 @@ public class usuarioServicio {
 
     public usuarioDTO save(usuarioDTO usuarioDTO) {
         usuario usuario = convertToEntity(usuarioDTO);
+        if(usuario.getEdad()< 18){
+            throw new IllegalArgumentException("La edad no puede ser menor a 18");
+        }
         usuario savedUsuario = usuarioRepo.save(usuario);
         return convertToDto(savedUsuario);
     }

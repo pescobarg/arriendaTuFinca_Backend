@@ -1,6 +1,7 @@
 package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.alquilerDTO;
+import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.alquilerServicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class alquilerControlador {
 
     @GetMapping("/{id}")
     public ResponseEntity<alquilerDTO> getAlquilerPorId(@PathVariable Long id) {
-        Optional<alquilerDTO> alquiler = alquilerServicio.findById(id);
+        Optional<alquilerDTO> alquiler = Optional.ofNullable(alquilerServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found rent with id = " + id)));
         return alquiler.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

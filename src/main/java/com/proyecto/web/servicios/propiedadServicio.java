@@ -33,6 +33,12 @@ public class propiedadServicio {
 
     public propiedadDTO guardar(propiedadDTO propiedadDTO) {
         propiedad propiedad = convertToEntity(propiedadDTO);
+        if(propiedad.getArea()<=0){
+            throw new IllegalArgumentException("El area no puede ser menor o igual a 0");
+        }
+        if(propiedad.getPrecio()<0){
+            throw new IllegalArgumentException("El precio no puede ser menor a 0");
+        }
         propiedad savedPropiedad = propiedadRepo.save(propiedad);
         return convertToDto(savedPropiedad);
     }

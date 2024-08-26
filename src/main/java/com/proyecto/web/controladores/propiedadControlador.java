@@ -1,6 +1,7 @@
 package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.propiedadDTO;
+import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.propiedadServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class propiedadControlador {
 
     @GetMapping("/{id}")
     public ResponseEntity<propiedadDTO> getPropiedadPorId(@PathVariable Long id) {
-        Optional<propiedadDTO> propiedadDTO = propiedadServicio.encontrarPropiedadPorId(id);
+        Optional<propiedadDTO> propiedadDTO = Optional.ofNullable(propiedadServicio.encontrarPropiedadPorId(id).orElseThrow(() -> new ResourceNotFound("Not found Property with id = " + id)));
         return propiedadDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 

@@ -1,6 +1,7 @@
 package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.usuarioDTO;
+import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.usuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class usuarioControlador {
 
     @GetMapping("/{id}")
     public ResponseEntity<usuarioDTO> getUsuarioPorId(@PathVariable Long id) {
-        Optional<usuarioDTO> usuarioDTO = usuarioServicio.findById(id);
+        Optional<usuarioDTO> usuarioDTO = Optional.ofNullable(usuarioServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found User with id = " + id)));
         return usuarioDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -36,9 +37,10 @@ public class usuarioControlador {
     public ResponseEntity<usuarioDTO> actualizarUsuario(@PathVariable Long id, @RequestBody usuarioDTO usuarioDTO) {
         if (usuarioServicio.findById(id).isPresent()) {
             usuarioDTO.setId(id);
+
             return ResponseEntity.ok(usuarioServicio.save(usuarioDTO));
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFound("Not found User with id = " + id);
         }
     }
 
@@ -48,7 +50,7 @@ public class usuarioControlador {
             usuarioServicio.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFound("Not found User with id = " + id);
         }
     }
 }
