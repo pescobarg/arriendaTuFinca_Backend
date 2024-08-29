@@ -3,6 +3,8 @@ package com.proyecto.web.servicios;
 import com.proyecto.web.dtos.propiedadDTO;
 import com.proyecto.web.modelos.propiedad;
 import com.proyecto.web.repositorios.propiedadRepositorio;
+import com.proyecto.web.repositorios.usuarioRepositorio;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,11 @@ public class propiedadServicio {
 
     @Autowired
     private propiedadRepositorio propiedadRepo;
+
+
+    @Autowired
+    private usuarioRepositorio usuarioRepo;
+
 
     @Autowired
     private ModelMapper modelMapper;
@@ -32,17 +39,20 @@ public class propiedadServicio {
     }
 
     public propiedadDTO guardar(propiedadDTO propiedadDTO) {
-        propiedad propiedad = convertToEntity(propiedadDTO);
-        if(propiedad.getArea()<=0){
-            throw new IllegalArgumentException("El area no puede ser menor o igual a 0");
+        if (!usuarioRepo.findById(propiedadDTO.getPropietarioId()).isPresent()) {
+            throw new IllegalArgumentException("El propietario con ID " + propiedadDTO.getPropietarioId() + " no existe.");
         }
-        if(propiedad.getPrecio()<0){
+        
+        propiedad propiedad = convertToEntity(propiedadDTO);
+        if (propiedad.getArea() <= 0) {
+            throw new IllegalArgumentException("El área no puede ser menor o igual a 0");
+        }
+        if (propiedad.getPrecio() < 0) {
             throw new IllegalArgumentException("El precio no puede ser menor a 0");
         }
         propiedad savedPropiedad = propiedadRepo.save(propiedad);
         return convertToDto(savedPropiedad);
     }
-
     public List<propiedadDTO> getPropiedadPorUsuario(Long propietarioId) {
         return propiedadRepo.findByPropietarioId(propietarioId).stream()
                 .map(this::convertToDto)
