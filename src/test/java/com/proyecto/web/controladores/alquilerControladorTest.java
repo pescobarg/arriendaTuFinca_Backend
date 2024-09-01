@@ -65,4 +65,25 @@ public class alquilerControladorTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L));
     }
+
+    @Test
+    void deleteAlquilerTest() throws Exception {
+        // Escenario 1: El alquiler con id 1 existe y se elimina correctamente
+        Mockito.when(alquilerServicio.findById(1L)).thenReturn(Optional.of(new alquilerDTO()));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/alquileres/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+        Mockito.verify(alquilerServicio, Mockito.times(1)).deleteById(1L);
+
+        // Escenario 2: El alquiler con id 99 no existe
+        Mockito.when(alquilerServicio.findById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/alquileres/99")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        Mockito.verify(alquilerServicio, Mockito.never()).deleteById(99L);
+    }
+
 }

@@ -69,4 +69,18 @@ public class usuarioControladorTest {
                 .andExpect(jsonPath("$.correo").value("juan@example.com"));
     }
 
+    @Test
+    void eliminarUsuarioTest() throws Exception {
+        usuarioDTO usuario = new usuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, TipoUsuario.ARRENDADOR, "Comentario 1");
+    
+        Mockito.when(usuarioServicio.findById(1L)).thenReturn(Optional.of(usuario));
+        Mockito.doNothing().when(usuarioServicio).deleteById(1L);
+                mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+        
+        Mockito.verify(usuarioServicio, Mockito.times(1)).deleteById(1L);
+}
+
+
 }

@@ -64,4 +64,20 @@ public class propiedadControladorTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L));
     }
+
+    @Test
+    void deletePropiedadTest() throws Exception {
+        Long propiedadId = 1L;
+    
+        propiedadDTO propiedad = new propiedadDTO(1L, 500L, 1L, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
+    
+        Mockito.when(propiedadServicio.encontrarPropiedadPorId(propiedadId)).thenReturn(Optional.of(propiedad));
+        Mockito.doNothing().when(propiedadServicio).deleteById(propiedadId);
+    
+        mockMvc.perform(MockMvcRequestBuilders.delete("/propiedades/{id}", propiedadId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+    
+
 }
