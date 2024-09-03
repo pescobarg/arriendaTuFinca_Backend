@@ -13,7 +13,7 @@ import com.proyecto.web.modelos.EstadoAlquiler;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class alquilerDTO {
+public class AlquilerDTO {
     private Long id;
     private Long usuarioId;
     private Long propiedadId;

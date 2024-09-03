@@ -1,8 +1,8 @@
 package com.proyecto.web.servicios;
 
-import com.proyecto.web.dtos.usuarioDTO;
-import com.proyecto.web.modelos.usuario;
-import com.proyecto.web.repositorios.usuarioRepositorio;
+import com.proyecto.web.dtos.UsuarioDTO;
+import com.proyecto.web.modelos.Usuario;
+import com.proyecto.web.repositorios.UsuarioRepositorio;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,31 +12,31 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class usuarioServicio {
+public class UsuarioServicio {
 
     @Autowired
-    private usuarioRepositorio usuarioRepo;
+    private UsuarioRepositorio usuarioRepo;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<usuarioDTO> findAll() {
+    public List<UsuarioDTO> findAll() {
         return usuarioRepo.findAll().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    public Optional<usuarioDTO> findById(Long id) {
+    public Optional<UsuarioDTO> findById(Long id) {
         return usuarioRepo.findById(id)
                 .map(this::convertToDto);
     }
 
-    public usuarioDTO save(usuarioDTO usuarioDTO) {
-        usuario usuario = convertToEntity(usuarioDTO);
+    public UsuarioDTO save(UsuarioDTO usuarioDTO) {
+        Usuario usuario = convertToEntity(usuarioDTO);
         if(usuario.getEdad()< 18){
             throw new IllegalArgumentException("La edad no puede ser menor a 18");
         }
-        usuario savedUsuario = usuarioRepo.save(usuario);
+        Usuario savedUsuario = usuarioRepo.save(usuario);
         return convertToDto(savedUsuario);
     }
 
@@ -44,11 +44,11 @@ public class usuarioServicio {
         usuarioRepo.deleteById(id);
     }
 
-    private usuarioDTO convertToDto(usuario usuario) {
-        return modelMapper.map(usuario, usuarioDTO.class);
+    private UsuarioDTO convertToDto(Usuario usuario) {
+        return modelMapper.map(usuario, UsuarioDTO.class);
     }
 
-    private usuario convertToEntity(usuarioDTO usuarioDTO) {
-        return modelMapper.map(usuarioDTO, usuario.class);
+    private Usuario convertToEntity(UsuarioDTO usuarioDTO) {
+        return modelMapper.map(usuarioDTO, Usuario.class);
     }
 }

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class propiedadDTO {
+public class PropiedadDTO {
 
     private Long id;
     private long area;

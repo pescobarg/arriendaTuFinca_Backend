@@ -1,11 +1,11 @@
 package com.proyecto.web.servicios;
 
-import com.proyecto.web.dtos.alquilerDTO;
+import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.modelos.EstadoAlquiler;
-import com.proyecto.web.modelos.alquiler;
-import com.proyecto.web.repositorios.alquilerRepositorio;
-import com.proyecto.web.repositorios.propiedadRepositorio;
-import com.proyecto.web.repositorios.usuarioRepositorio;
+import com.proyecto.web.modelos.Alquiler;
+import com.proyecto.web.repositorios.AlquilerRepositorio;
+import com.proyecto.web.repositorios.PropiedadRepositorio;
+import com.proyecto.web.repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,19 +24,19 @@ import static org.mockito.Mockito.*;
  class AlquilerServicioTest {
 
     @Mock
-    private alquilerRepositorio alquilerRepo;
+    private AlquilerRepositorio alquilerRepo;
 
     @Mock
-    private propiedadRepositorio propiedadRepo;
+    private PropiedadRepositorio propiedadRepo;
 
     @Mock
-    private usuarioRepositorio usuarioRepo;
+    private UsuarioRepositorio usuarioRepo;
 
     @Mock
     private ModelMapper modelMapper;
 
     @InjectMocks
-    private alquilerServicio alquilerServicio;
+    private AlquilerServicio alquilerServicio;
 
     @BeforeEach
     public void setUp() {
@@ -45,13 +45,13 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testFindAll() {
-        alquiler alquiler = new alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
-        alquilerDTO alquilerDTO = new alquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
+        Alquiler alquiler = new Alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
+        AlquilerDTO alquilerDTO = new AlquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
         
         when(alquilerRepo.findAll()).thenReturn(Collections.singletonList(alquiler));
-        when(modelMapper.map(alquiler, alquilerDTO.class)).thenReturn(alquilerDTO);
+        when(modelMapper.map(alquiler, AlquilerDTO.class)).thenReturn(alquilerDTO);
 
-        List<alquilerDTO> result = alquilerServicio.findAll();
+        List<AlquilerDTO> result = alquilerServicio.findAll();
         
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -60,13 +60,13 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testFindById() {
-        alquiler alquiler = new alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
-        alquilerDTO alquilerDTO = new alquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
+        Alquiler alquiler = new Alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
+        AlquilerDTO alquilerDTO = new AlquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
 
         when(alquilerRepo.findById(1L)).thenReturn(Optional.of(alquiler));
-        when(modelMapper.map(alquiler, alquilerDTO.class)).thenReturn(alquilerDTO);
+        when(modelMapper.map(alquiler, AlquilerDTO.class)).thenReturn(alquilerDTO);
 
-        Optional<alquilerDTO> result = alquilerServicio.findById(1L);
+        Optional<AlquilerDTO> result = alquilerServicio.findById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(alquilerDTO, result.get());
@@ -74,13 +74,13 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testFindByUsuarioId() {
-        alquiler alquiler = new alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
-        alquilerDTO alquilerDTO = new alquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
+        Alquiler alquiler = new Alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
+        AlquilerDTO alquilerDTO = new AlquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
 
         when(alquilerRepo.findByUsuarioId(1L)).thenReturn(Collections.singletonList(alquiler));
-        when(modelMapper.map(alquiler, alquilerDTO.class)).thenReturn(alquilerDTO);
+        when(modelMapper.map(alquiler, AlquilerDTO.class)).thenReturn(alquilerDTO);
 
-        List<alquilerDTO> result = alquilerServicio.findByUsuarioId(1L);
+        List<AlquilerDTO> result = alquilerServicio.findByUsuarioId(1L);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -89,13 +89,13 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testFindByPropiedadId() {
-        alquiler alquiler = new alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
-        alquilerDTO alquilerDTO = new alquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
+        Alquiler alquiler = new Alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
+        AlquilerDTO alquilerDTO = new AlquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
 
         when(alquilerRepo.findByPropiedadId(1L)).thenReturn(Collections.singletonList(alquiler));
-        when(modelMapper.map(alquiler, alquilerDTO.class)).thenReturn(alquilerDTO);
+        when(modelMapper.map(alquiler, AlquilerDTO.class)).thenReturn(alquilerDTO);
 
-        List<alquilerDTO> result = alquilerServicio.findByPropiedadId(1L);
+        List<AlquilerDTO> result = alquilerServicio.findByPropiedadId(1L);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -104,16 +104,16 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testSave() {
-        alquilerDTO alquilerDTO = new alquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
-        alquiler alquiler = new alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
+        AlquilerDTO alquilerDTO = new AlquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
+        Alquiler alquiler = new Alquiler(1L, 1L, 1L, LocalDate.now(), LocalDate.now().plusDays(1), EstadoAlquiler.PENDIENTE, "comentarios");
         
         when(propiedadRepo.existsById(1L)).thenReturn(true);
         when(usuarioRepo.existsById(1L)).thenReturn(true);
-        when(modelMapper.map(alquilerDTO, alquiler.class)).thenReturn(alquiler);
+        when(modelMapper.map(alquilerDTO, Alquiler.class)).thenReturn(alquiler);
         when(alquilerRepo.save(alquiler)).thenReturn(alquiler);
-        when(modelMapper.map(alquiler, alquilerDTO.class)).thenReturn(alquilerDTO);
+        when(modelMapper.map(alquiler, AlquilerDTO.class)).thenReturn(alquilerDTO);
 
-        alquilerDTO result = alquilerServicio.save(alquilerDTO);
+        AlquilerDTO result = alquilerServicio.save(alquilerDTO);
 
         assertNotNull(result);
         assertEquals(alquilerDTO, result);
@@ -121,7 +121,7 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testSaveWithInvalidPropiedad() {
-        alquilerDTO alquilerDTO = new alquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
+        AlquilerDTO alquilerDTO = new AlquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
 
         when(propiedadRepo.existsById(1L)).thenReturn(false);
 
@@ -134,7 +134,7 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testSaveWithInvalidUsuario() {
-        alquilerDTO alquilerDTO = new alquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
+        AlquilerDTO alquilerDTO = new AlquilerDTO(1L, 1L, 1L, EstadoAlquiler.PENDIENTE, LocalDate.now(), LocalDate.now().plusDays(1), "comentarios");
 
         when(propiedadRepo.existsById(1L)).thenReturn(true);
         when(usuarioRepo.existsById(1L)).thenReturn(false);

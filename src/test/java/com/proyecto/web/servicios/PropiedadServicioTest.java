@@ -1,11 +1,11 @@
 package com.proyecto.web.servicios;
 
-import com.proyecto.web.dtos.propiedadDTO;
+import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.modelos.TipoPropiedad;
-import com.proyecto.web.modelos.propiedad;
-import com.proyecto.web.modelos.usuario;
-import com.proyecto.web.repositorios.propiedadRepositorio;
-import com.proyecto.web.repositorios.usuarioRepositorio;
+import com.proyecto.web.modelos.Propiedad;
+import com.proyecto.web.modelos.Usuario;
+import com.proyecto.web.repositorios.PropiedadRepositorio;
+import com.proyecto.web.repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,41 +23,41 @@ import static org.mockito.Mockito.*;
 class PropiedadServicioTest {
 
     @Mock
-    private propiedadRepositorio propiedadRepo;
+    private PropiedadRepositorio propiedadRepo;
 
     @Mock
-    private usuarioRepositorio usuarioRepo;
+    private UsuarioRepositorio usuarioRepo;
 
     @Mock
     private ModelMapper modelMapper;
 
     @InjectMocks
-    private propiedadServicio propiedadServicio;
+    private PropiedadServicio propiedadServicio;
 
-    private propiedad propiedad;
-    private propiedadDTO propiedadDTO;
-    private usuario usuario;
+    private Propiedad propiedad;
+    private PropiedadDTO propiedadDTO;
+    private Usuario usuario;
 
     @BeforeEach
      void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        usuario = new usuario();
+        usuario = new Usuario();
         usuario.setId(1L);
 
-        propiedad = new propiedad(1L, 100L, 1L, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
-        propiedadDTO = new propiedadDTO(1L, 100L, 1L, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
+        propiedad = new Propiedad(1L, 100L, 1L, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
+        propiedadDTO = new PropiedadDTO(1L, 100L, 1L, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
     }
 
     @Test
      void testGetPropiedades() {
-        List<propiedad> propiedades = new ArrayList<>();
+        List<Propiedad> propiedades = new ArrayList<>();
         propiedades.add(propiedad);
 
         when(propiedadRepo.findAll()).thenReturn(propiedades);
-        when(modelMapper.map(propiedad, propiedadDTO.class)).thenReturn(propiedadDTO);
+        when(modelMapper.map(propiedad, PropiedadDTO.class)).thenReturn(propiedadDTO);
 
-        List<propiedadDTO> result = propiedadServicio.getPropiedades();
+        List<PropiedadDTO> result = propiedadServicio.getPropiedades();
         assertEquals(1, result.size());
         assertEquals(propiedadDTO, result.get(0));
     }
@@ -65,9 +65,9 @@ class PropiedadServicioTest {
     @Test
      void testEncontrarPropiedadPorId() {
         when(propiedadRepo.findById(1L)).thenReturn(Optional.of(propiedad));
-        when(modelMapper.map(propiedad, propiedadDTO.class)).thenReturn(propiedadDTO);
+        when(modelMapper.map(propiedad, PropiedadDTO.class)).thenReturn(propiedadDTO);
 
-        Optional<propiedadDTO> result = propiedadServicio.encontrarPropiedadPorId(1L);
+        Optional<PropiedadDTO> result = propiedadServicio.encontrarPropiedadPorId(1L);
         assertTrue(result.isPresent());
         assertEquals(propiedadDTO, result.get());
     }
@@ -75,11 +75,11 @@ class PropiedadServicioTest {
     @Test
      void testGuardarPropiedad() {
         when(usuarioRepo.findById(1L)).thenReturn(Optional.of(usuario));
-        when(modelMapper.map(propiedadDTO, propiedad.class)).thenReturn(propiedad);
+        when(modelMapper.map(propiedadDTO, Propiedad.class)).thenReturn(propiedad);
         when(propiedadRepo.save(propiedad)).thenReturn(propiedad);
-        when(modelMapper.map(propiedad, propiedadDTO.class)).thenReturn(propiedadDTO);
+        when(modelMapper.map(propiedad, PropiedadDTO.class)).thenReturn(propiedadDTO);
 
-        propiedadDTO result = propiedadServicio.guardar(propiedadDTO);
+        PropiedadDTO result = propiedadServicio.guardar(propiedadDTO);
         assertEquals(propiedadDTO, result);
     }
 
@@ -98,13 +98,13 @@ class PropiedadServicioTest {
 
     @Test
      void testGetPropiedadPorUsuario() {
-        List<propiedad> propiedades = new ArrayList<>();
+        List<Propiedad> propiedades = new ArrayList<>();
         propiedades.add(propiedad);
 
         when(propiedadRepo.findByPropietarioId(1L)).thenReturn(propiedades);
-        when(modelMapper.map(propiedad, propiedadDTO.class)).thenReturn(propiedadDTO);
+        when(modelMapper.map(propiedad, PropiedadDTO.class)).thenReturn(propiedadDTO);
 
-        List<propiedadDTO> result = propiedadServicio.getPropiedadPorUsuario(1L);
+        List<PropiedadDTO> result = propiedadServicio.getPropiedadPorUsuario(1L);
         assertEquals(1, result.size());
         assertEquals(propiedadDTO, result.get(0));
     }

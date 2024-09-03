@@ -1,8 +1,8 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.dtos.usuarioDTO;
+import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.servicios.usuarioServicio;
+import com.proyecto.web.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,29 +12,29 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
-public class usuarioControlador {
+public class UsuarioControlador {
 
     @Autowired
-    private usuarioServicio usuarioServicio;
+    private UsuarioServicio usuarioServicio;
 
     @GetMapping
-    public List<usuarioDTO> getUsuarios() {
+    public List<UsuarioDTO> getUsuarios() {
         return usuarioServicio.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<usuarioDTO> getUsuarioPorId(@PathVariable Long id) {
-        Optional<usuarioDTO> usuarioDTO = Optional.ofNullable(usuarioServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found User with id = " + id)));
+    public ResponseEntity<UsuarioDTO> getUsuarioPorId(@PathVariable Long id) {
+        Optional<UsuarioDTO> usuarioDTO = Optional.ofNullable(usuarioServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found User with id = " + id)));
         return usuarioDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public usuarioDTO crearUsuario(@RequestBody usuarioDTO usuarioDTO) {
+    public UsuarioDTO crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         return usuarioServicio.save(usuarioDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<usuarioDTO> actualizarUsuario(@PathVariable Long id, @RequestBody usuarioDTO usuarioDTO) {
+    public ResponseEntity<UsuarioDTO> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
         if (usuarioServicio.findById(id).isPresent()) {
             usuarioDTO.setId(id);
 

@@ -1,8 +1,8 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.dtos.propiedadDTO;
+import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.servicios.propiedadServicio;
+import com.proyecto.web.servicios.PropiedadServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,29 +12,29 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/propiedades")
-public class propiedadControlador {
+public class PropiedadControlador {
 
     @Autowired
-    private propiedadServicio propiedadServicio;
+    private PropiedadServicio propiedadServicio;
 
     @GetMapping
-    public List<propiedadDTO> getPropiedades() {
+    public List<PropiedadDTO> getPropiedades() {
         return propiedadServicio.getPropiedades();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<propiedadDTO> getPropiedadPorId(@PathVariable Long id) {
-        Optional<propiedadDTO> propiedadDTO = Optional.ofNullable(propiedadServicio.encontrarPropiedadPorId(id).orElseThrow(() -> new ResourceNotFound("Not found Property with id = " + id)));
+    public ResponseEntity<PropiedadDTO> getPropiedadPorId(@PathVariable Long id) {
+        Optional<PropiedadDTO> propiedadDTO = Optional.ofNullable(propiedadServicio.encontrarPropiedadPorId(id).orElseThrow(() -> new ResourceNotFound("Not found Property with id = " + id)));
         return propiedadDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public propiedadDTO crearPropiedad(@RequestBody propiedadDTO propiedadDTO) {
+    public PropiedadDTO crearPropiedad(@RequestBody PropiedadDTO propiedadDTO) {
         return propiedadServicio.guardar(propiedadDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<propiedadDTO> actualizarPropiedad(@PathVariable Long id, @RequestBody propiedadDTO propiedadDTO) {
+    public ResponseEntity<PropiedadDTO> actualizarPropiedad(@PathVariable Long id, @RequestBody PropiedadDTO propiedadDTO) {
         if (propiedadServicio.encontrarPropiedadPorId(id).isPresent()) {
             propiedadDTO.setId(id);
             return ResponseEntity.ok(propiedadServicio.guardar(propiedadDTO));
@@ -54,7 +54,7 @@ public class propiedadControlador {
     }
 
     @GetMapping("/usuario/{propietarioId}")
-    public List<propiedadDTO> getPropiedadPorUsuario(@PathVariable Long propietarioId) {
+    public List<PropiedadDTO> getPropiedadPorUsuario(@PathVariable Long propietarioId) {
         return propiedadServicio.getPropiedadPorUsuario(propietarioId);
     }
 }

@@ -1,9 +1,9 @@
 package com.proyecto.web.servicios;
 
-import com.proyecto.web.dtos.propiedadDTO;
-import com.proyecto.web.modelos.propiedad;
-import com.proyecto.web.repositorios.propiedadRepositorio;
-import com.proyecto.web.repositorios.usuarioRepositorio;
+import com.proyecto.web.dtos.PropiedadDTO;
+import com.proyecto.web.modelos.Propiedad;
+import com.proyecto.web.repositorios.PropiedadRepositorio;
+import com.proyecto.web.repositorios.UsuarioRepositorio;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,46 +14,46 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class propiedadServicio {
+public class PropiedadServicio {
 
     @Autowired
-    private propiedadRepositorio propiedadRepo;
+    private PropiedadRepositorio propiedadRepo;
 
 
     @Autowired
-    private usuarioRepositorio usuarioRepo;
+    private UsuarioRepositorio usuarioRepo;
 
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<propiedadDTO> getPropiedades() {
+    public List<PropiedadDTO> getPropiedades() {
         return propiedadRepo.findAll().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    public Optional<propiedadDTO> encontrarPropiedadPorId(Long id) {
+    public Optional<PropiedadDTO> encontrarPropiedadPorId(Long id) {
         return propiedadRepo.findById(id)
                 .map(this::convertToDto);
     }
 
-    public propiedadDTO guardar(propiedadDTO propiedadDTO) {
+    public PropiedadDTO guardar(PropiedadDTO propiedadDTO) {
         if (!usuarioRepo.findById(propiedadDTO.getPropietarioId()).isPresent()) {
             throw new IllegalArgumentException("El propietario con ID " + propiedadDTO.getPropietarioId() + " no existe.");
         }
         
-        propiedad propiedad = convertToEntity(propiedadDTO);
+        Propiedad propiedad = convertToEntity(propiedadDTO);
         if (propiedad.getArea() <= 0) {
             throw new IllegalArgumentException("El área no puede ser menor o igual a 0");
         }
         if (propiedad.getPrecio() < 0) {
             throw new IllegalArgumentException("El precio no puede ser menor a 0");
         }
-        propiedad savedPropiedad = propiedadRepo.save(propiedad);
+        Propiedad savedPropiedad = propiedadRepo.save(propiedad);
         return convertToDto(savedPropiedad);
     }
-    public List<propiedadDTO> getPropiedadPorUsuario(Long propietarioId) {
+    public List<PropiedadDTO> getPropiedadPorUsuario(Long propietarioId) {
         return propiedadRepo.findByPropietarioId(propietarioId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -63,11 +63,11 @@ public class propiedadServicio {
         propiedadRepo.deleteById(id);
     }
 
-    private propiedadDTO convertToDto(propiedad propiedad) {
-        return modelMapper.map(propiedad, propiedadDTO.class);
+    private PropiedadDTO convertToDto(Propiedad propiedad) {
+        return modelMapper.map(propiedad, PropiedadDTO.class);
     }
 
-    private propiedad convertToEntity(propiedadDTO propiedadDTO) {
-        return modelMapper.map(propiedadDTO, propiedad.class);
+    private Propiedad convertToEntity(PropiedadDTO propiedadDTO) {
+        return modelMapper.map(propiedadDTO, Propiedad.class);
     }
 }

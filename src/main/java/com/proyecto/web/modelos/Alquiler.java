@@ -12,36 +12,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class propiedad {
+public class Alquiler {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private long area;
+    private Long usuarioId; 
 
     @Column(nullable = false)
-    private Long propietarioId;
+    private Long propiedadId; 
 
     @Column(nullable = false)
-    private String direccion;
+    private LocalDate fechaInicio;
 
     @Column(nullable = false)
-    private double precio;
-
-    @Column(nullable = false)
-    private boolean disponible;
+    private LocalDate fechaFin;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoPropiedad tipoPropiedad;
+    private EstadoAlquiler estado;
 
-    @Column
-    private String descripcion;
+    @Column(nullable = true)
+    private String comentarios; 
 }

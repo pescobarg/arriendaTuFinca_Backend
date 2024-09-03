@@ -1,8 +1,8 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.dtos.alquilerDTO;
+import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.servicios.alquilerServicio;
+import com.proyecto.web.servicios.AlquilerServicio;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,39 +13,39 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/alquileres")
-public class alquilerControlador {
+public class AlquilerControlador {
 
     @Autowired
-    private alquilerServicio alquilerServicio;
+    private AlquilerServicio alquilerServicio;
 
     @GetMapping
-    public List<alquilerDTO> getAllAlquileres() {
+    public List<AlquilerDTO> getAllAlquileres() {
         return alquilerServicio.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<alquilerDTO> getAlquilerPorId(@PathVariable Long id) {
-        Optional<alquilerDTO> alquiler = Optional.ofNullable(alquilerServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found rent with id = " + id)));
+    public ResponseEntity<AlquilerDTO> getAlquilerPorId(@PathVariable Long id) {
+        Optional<AlquilerDTO> alquiler = Optional.ofNullable(alquilerServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found rent with id = " + id)));
         return alquiler.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<alquilerDTO> getAlquileresPorUsuario(@PathVariable Long usuarioId) {
+    public List<AlquilerDTO> getAlquileresPorUsuario(@PathVariable Long usuarioId) {
         return alquilerServicio.findByUsuarioId(usuarioId);
     }
 
     @GetMapping("/propiedad/{propiedadId}")
-    public List<alquilerDTO> getAlquileresPorPropiedad(@PathVariable Long propiedadId) {
+    public List<AlquilerDTO> getAlquileresPorPropiedad(@PathVariable Long propiedadId) {
         return alquilerServicio.findByPropiedadId(propiedadId);
     }
 
     @PostMapping
-    public alquilerDTO crearAlquiler(@RequestBody alquilerDTO alquilerDTO) {
+    public AlquilerDTO crearAlquiler(@RequestBody AlquilerDTO alquilerDTO) {
         return alquilerServicio.save(alquilerDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<alquilerDTO> actualizarAlquiler(@PathVariable Long id, @RequestBody alquilerDTO alquilerDTO) {
+    public ResponseEntity<AlquilerDTO> actualizarAlquiler(@PathVariable Long id, @RequestBody AlquilerDTO alquilerDTO) {
         if (alquilerServicio.findById(id).isPresent()) {
             alquilerDTO.setId(id);
             return ResponseEntity.ok(alquilerServicio.save(alquilerDTO));

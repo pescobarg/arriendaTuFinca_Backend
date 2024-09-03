@@ -17,31 +17,31 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class usuario {
-    
+public class Propiedad {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false)
-    private String nombre;
-    
-    @Column(nullable = false)
-    private String apellido;
-    
-    @Column(nullable = false, unique = true)
-    private String correo;
 
     @Column(nullable = false)
-    private String contrasenia;
+    private long area;
 
     @Column(nullable = false)
-    private int edad;
-
-    @Enumerated(EnumType.STRING) 
-    @Column(nullable = false)
-    private TipoUsuario tipoUsuario;
+    private Long propietarioId;
 
     @Column(nullable = false)
-    private String comentarios;
+    private String direccion;
+
+    @Column(nullable = false)
+    private double precio;
+
+    @Column(nullable = false)
+    private boolean disponible;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoPropiedad tipoPropiedad;
+
+    @Column
+    private String descripcion;
 }
