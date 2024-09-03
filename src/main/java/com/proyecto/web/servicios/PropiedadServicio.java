@@ -6,7 +6,6 @@ import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,16 +15,19 @@ import java.util.stream.Collectors;
 @Service
 public class PropiedadServicio {
 
-    @Autowired
-    private PropiedadRepositorio propiedadRepo;
+    private final PropiedadRepositorio propiedadRepo;
+    private final UsuarioRepositorio usuarioRepo;
+    private final ModelMapper modelMapper;
 
+    private static final String PROPIETARIO_NO_EXISTE = "El propietario con ID ";
+    private static final String AREA_INVALIDA = "El área no puede ser menor o igual a 0";
+    private static final String PRECIO_INVALIDO = "El precio no puede ser menor a 0";
 
-    @Autowired
-    private UsuarioRepositorio usuarioRepo;
-
-
-    @Autowired
-    private ModelMapper modelMapper;
+    public PropiedadServicio(PropiedadRepositorio propiedadRepo, UsuarioRepositorio usuarioRepo, ModelMapper modelMapper) {
+        this.propiedadRepo = propiedadRepo;
+        this.usuarioRepo = usuarioRepo;
+        this.modelMapper = modelMapper;
+    }
 
     public List<PropiedadDTO> getPropiedades() {
         return propiedadRepo.findAll().stream()
@@ -40,19 +42,20 @@ public class PropiedadServicio {
 
     public PropiedadDTO guardar(PropiedadDTO propiedadDTO) {
         if (!usuarioRepo.findById(propiedadDTO.getPropietarioId()).isPresent()) {
-            throw new IllegalArgumentException("El propietario con ID " + propiedadDTO.getPropietarioId() + " no existe.");
+            throw new IllegalArgumentException(PROPIETARIO_NO_EXISTE + propiedadDTO.getPropietarioId() + " no existe.");
         }
-        
+
         Propiedad propiedad = convertToEntity(propiedadDTO);
-        if (propiedad.getArea() <= 0) {
-            throw new IllegalArgumentException("El área no puede ser menor o igual a 0");
+        if (propiedad.getArea() <= 0L) {
+            throw new IllegalArgumentException(AREA_INVALIDA);
         }
-        if (propiedad.getPrecio() < 0) {
-            throw new IllegalArgumentException("El precio no puede ser menor a 0");
+        if (propiedad.getPrecio() < 0L) {
+            throw new IllegalArgumentException(PRECIO_INVALIDO);
         }
         Propiedad savedPropiedad = propiedadRepo.save(propiedad);
         return convertToDto(savedPropiedad);
     }
+
     public List<PropiedadDTO> getPropiedadPorUsuario(Long propietarioId) {
         return propiedadRepo.findByPropietarioId(propietarioId).stream()
                 .map(this::convertToDto)

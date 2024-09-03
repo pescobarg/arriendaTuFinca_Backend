@@ -4,7 +4,6 @@ import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.AlquilerServicio;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +14,14 @@ import java.util.Optional;
 @RequestMapping("/alquileres")
 public class AlquilerControlador {
 
-    @Autowired
-    private AlquilerServicio alquilerServicio;
+    private final AlquilerServicio alquilerServicio;
+
+    private static final String NOT_FOUND_MESSAGE = "Not found rent with id = ";
+
+    public AlquilerControlador(AlquilerServicio alquilerServicio) {
+        this.alquilerServicio = alquilerServicio;
+    }
+
 
     @GetMapping
     public List<AlquilerDTO> getAllAlquileres() {
@@ -25,7 +30,7 @@ public class AlquilerControlador {
 
     @GetMapping("/{id}")
     public ResponseEntity<AlquilerDTO> getAlquilerPorId(@PathVariable Long id) {
-        Optional<AlquilerDTO> alquiler = Optional.ofNullable(alquilerServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found rent with id = " + id)));
+        Optional<AlquilerDTO> alquiler = Optional.ofNullable(alquilerServicio.findById(id).orElseThrow(() -> new ResourceNotFound(NOT_FOUND_MESSAGE + id)));
         return alquiler.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -50,7 +55,7 @@ public class AlquilerControlador {
             alquilerDTO.setId(id);
             return ResponseEntity.ok(alquilerServicio.save(alquilerDTO));
         } else {
-            throw new ResourceNotFound("Not found rent with id = " + id);
+            throw new ResourceNotFound(NOT_FOUND_MESSAGE + id);
         }
     }
 
@@ -60,7 +65,7 @@ public class AlquilerControlador {
             alquilerServicio.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            throw new ResourceNotFound("Not found rent with id = " + id);
+            throw new ResourceNotFound(NOT_FOUND_MESSAGE  + id);
         }
     }
 }

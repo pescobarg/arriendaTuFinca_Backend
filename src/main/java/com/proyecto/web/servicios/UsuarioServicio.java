@@ -4,7 +4,6 @@ import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +13,15 @@ import java.util.stream.Collectors;
 @Service
 public class UsuarioServicio {
 
-    @Autowired
-    private UsuarioRepositorio usuarioRepo;
+    private final UsuarioRepositorio usuarioRepo;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private static final String EDAD_INVALIDA = "La edad no puede ser menor a 18";
+
+    public UsuarioServicio(UsuarioRepositorio usuarioRepo, ModelMapper modelMapper) {
+        this.usuarioRepo = usuarioRepo;
+        this.modelMapper = modelMapper;
+    }
 
     public List<UsuarioDTO> findAll() {
         return usuarioRepo.findAll().stream()
@@ -34,7 +37,7 @@ public class UsuarioServicio {
     public UsuarioDTO save(UsuarioDTO usuarioDTO) {
         Usuario usuario = convertToEntity(usuarioDTO);
         if (usuario.getEdad() < 18) {
-            throw new IllegalArgumentException("La edad no puede ser menor a 18");
+            throw new IllegalArgumentException(EDAD_INVALIDA);
         }
         Usuario savedUsuario = usuarioRepo.save(usuario);
         return convertToDto(savedUsuario);

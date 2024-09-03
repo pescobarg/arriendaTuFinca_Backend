@@ -7,7 +7,6 @@ import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,20 +16,20 @@ import java.util.stream.Collectors;
 @Service
 public class AlquilerServicio {
 
-    @Autowired
-    private AlquilerRepositorio alquilerRepo;
+    private final AlquilerRepositorio alquilerRepo;
+    private final PropiedadRepositorio propiedadRepo;
+    private final UsuarioRepositorio usuarioRepo;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private PropiedadRepositorio propiedadRepo;
-
-    @Autowired
-    private UsuarioRepositorio usuarioRepo;
-
-
-
-    @Autowired
-    private ModelMapper modelMapper;
-
+    public AlquilerServicio(AlquilerRepositorio alquilerRepo, 
+                            PropiedadRepositorio propiedadRepo, 
+                            UsuarioRepositorio usuarioRepo, 
+                            ModelMapper modelMapper) {
+        this.alquilerRepo = alquilerRepo;
+        this.propiedadRepo = propiedadRepo;
+        this.usuarioRepo = usuarioRepo;
+        this.modelMapper = modelMapper;
+    }
     public List<AlquilerDTO> findAll() {
         List<Alquiler> alquileres = alquilerRepo.findAll();
         return alquileres.stream()

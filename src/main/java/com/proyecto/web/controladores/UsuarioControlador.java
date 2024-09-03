@@ -3,7 +3,6 @@ package com.proyecto.web.controladores;
 import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.UsuarioServicio;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,13 @@ import java.util.Optional;
 @RequestMapping("/usuarios")
 public class UsuarioControlador {
 
-    @Autowired
-    private UsuarioServicio usuarioServicio;
+    private final UsuarioServicio usuarioServicio;
+
+    private static final String NOT_FOUND_MESSAGE = "Not found User with id = ";
+
+    public UsuarioControlador(UsuarioServicio usuarioServicio) {
+        this.usuarioServicio = usuarioServicio;
+    }
 
     @GetMapping
     public List<UsuarioDTO> getUsuarios() {
@@ -24,7 +28,8 @@ public class UsuarioControlador {
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> getUsuarioPorId(@PathVariable Long id) {
-        Optional<UsuarioDTO> usuarioDTO = Optional.ofNullable(usuarioServicio.findById(id).orElseThrow(() -> new ResourceNotFound("Not found User with id = " + id)));
+        Optional<UsuarioDTO> usuarioDTO = Optional.ofNullable(usuarioServicio.findById(id)
+                .orElseThrow(() -> new ResourceNotFound(NOT_FOUND_MESSAGE + id)));
         return usuarioDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -37,10 +42,9 @@ public class UsuarioControlador {
     public ResponseEntity<UsuarioDTO> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
         if (usuarioServicio.findById(id).isPresent()) {
             usuarioDTO.setId(id);
-
             return ResponseEntity.ok(usuarioServicio.save(usuarioDTO));
         } else {
-            throw new ResourceNotFound("Not found User with id = " + id);
+            throw new ResourceNotFound(NOT_FOUND_MESSAGE + id);
         }
     }
 
@@ -50,7 +54,7 @@ public class UsuarioControlador {
             usuarioServicio.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            throw new ResourceNotFound("Not found User with id = " + id);
+            throw new ResourceNotFound(NOT_FOUND_MESSAGE + id);
         }
     }
 }
