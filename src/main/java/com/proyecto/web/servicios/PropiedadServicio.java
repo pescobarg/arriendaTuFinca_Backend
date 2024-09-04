@@ -4,6 +4,8 @@ import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class PropiedadServicio {
     private static final String AREA_INVALIDA = "El área no puede ser menor o igual a 0";
     private static final String PRECIO_INVALIDO = "El precio no puede ser menor a 0";
 
+    @Autowired
     public PropiedadServicio(PropiedadRepositorio propiedadRepo, UsuarioRepositorio usuarioRepo, ModelMapper modelMapper) {
         this.propiedadRepo = propiedadRepo;
         this.usuarioRepo = usuarioRepo;

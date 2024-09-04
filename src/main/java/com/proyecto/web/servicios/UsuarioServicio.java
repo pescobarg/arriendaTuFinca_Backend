@@ -6,6 +6,9 @@ import com.proyecto.web.repositorios.UsuarioRepositorio;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ public class UsuarioServicio {
 
     private static final String EDAD_INVALIDA = "La edad no puede ser menor a 18";
 
+    @Autowired
     public UsuarioServicio(UsuarioRepositorio usuarioRepo, ModelMapper modelMapper) {
         this.usuarioRepo = usuarioRepo;
         this.modelMapper = modelMapper;

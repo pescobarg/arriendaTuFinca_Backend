@@ -3,6 +3,8 @@ package com.proyecto.web.controladores;
 import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.PropiedadServicio;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,7 @@ public class PropiedadControlador {
 
     private static final String NOT_FOUND_MESSAGE = "Not found property with id = ";
 
+    @Autowired
     public PropiedadControlador(PropiedadServicio propiedadServicio) {
         this.propiedadServicio = propiedadServicio;
     }

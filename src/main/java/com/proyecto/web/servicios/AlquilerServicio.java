@@ -5,8 +5,8 @@ import com.proyecto.web.modelos.Alquiler;
 import com.proyecto.web.repositorios.AlquilerRepositorio;
 import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +21,7 @@ public class AlquilerServicio {
     private final UsuarioRepositorio usuarioRepo;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public AlquilerServicio(AlquilerRepositorio alquilerRepo, 
                             PropiedadRepositorio propiedadRepo, 
                             UsuarioRepositorio usuarioRepo, 
@@ -30,6 +31,7 @@ public class AlquilerServicio {
         this.usuarioRepo = usuarioRepo;
         this.modelMapper = modelMapper;
     }
+
     public List<AlquilerDTO> findAll() {
         List<Alquiler> alquileres = alquilerRepo.findAll();
         return alquileres.stream()

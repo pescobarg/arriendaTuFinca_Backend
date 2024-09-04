@@ -4,6 +4,7 @@ import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.AlquilerServicio;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class AlquilerControlador {
 
     private static final String NOT_FOUND_MESSAGE = "Not found rent with id = ";
 
+    @Autowired
     public AlquilerControlador(AlquilerServicio alquilerServicio) {
         this.alquilerServicio = alquilerServicio;
     }
