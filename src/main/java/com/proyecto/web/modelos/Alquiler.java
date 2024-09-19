@@ -1,12 +1,6 @@
 package com.proyecto.web.modelos;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,11 +19,13 @@ public class Alquiler {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long usuarioId; 
+    @ManyToOne
+    @JoinColumn(name = "usuarioAsignado", nullable = false)
+    private Usuario usuarioAsignado;
 
-    @Column(nullable = false)
-    private Long propiedadId; 
+    @ManyToOne
+    @JoinColumn(name = "propiedad", nullable = false)
+    private Propiedad propiedad;
 
     @Column(nullable = false)
     private LocalDate fechaInicio;
@@ -42,5 +38,5 @@ public class Alquiler {
     private EstadoAlquiler estado;
 
     @Column(nullable = true)
-    private String comentarios; 
+    private String comentarios;
 }

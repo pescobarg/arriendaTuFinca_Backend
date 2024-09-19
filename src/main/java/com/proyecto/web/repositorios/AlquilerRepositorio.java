@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface AlquilerRepositorio extends JpaRepository<Alquiler, Long> {
-    List<Alquiler> findByUsuarioId(Long usuarioId);
-    List<Alquiler> findByPropiedadId(Long propiedadId);
+
+    List<Alquiler> findByUsuarioAsignado_Id(Long usuarioId);
+    List<Alquiler> findByPropiedad_Id(Long propiedadId);
 }

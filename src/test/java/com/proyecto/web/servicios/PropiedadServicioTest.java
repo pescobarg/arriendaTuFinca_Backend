@@ -1,6 +1,7 @@
 package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.PropiedadDTO;
+import com.proyecto.web.dtos.UsuarioDTO; 
 import com.proyecto.web.modelos.TipoPropiedad;
 import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.modelos.Usuario;
@@ -36,21 +37,33 @@ class PropiedadServicioTest {
 
     private Propiedad propiedad;
     private PropiedadDTO propiedadDTO;
-    private Usuario usuario;
+    private UsuarioDTO usuarioDTO; 
 
     @BeforeEach
-     void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        usuario = new Usuario();
+        Usuario usuario = new Usuario();
         usuario.setId(1L);
 
-        propiedad = new Propiedad(1L, 100L, 1L, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
-        propiedadDTO = new PropiedadDTO(1L, 100L, 1L, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
+        usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(1L);
+
+        propiedad = new Propiedad(1L, 100L, usuario, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
+
+        propiedadDTO = new PropiedadDTO();
+        propiedadDTO.setId(1L);
+        propiedadDTO.setArea(100L);
+        propiedadDTO.setPropietario(usuarioDTO); // Usa UsuarioDTO
+        propiedadDTO.setDireccion("direccion");
+        propiedadDTO.setPrecio(50000.0);
+        propiedadDTO.setDisponible(true);
+        propiedadDTO.setTipoPropiedad(TipoPropiedad.APARTAMENTO);
+        propiedadDTO.setDescripcion("descripcion");
     }
 
     @Test
-     void testGetPropiedades() {
+    void testGetPropiedades() {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades.add(propiedad);
 
@@ -63,7 +76,7 @@ class PropiedadServicioTest {
     }
 
     @Test
-     void testEncontrarPropiedadPorId() {
+    void testEncontrarPropiedadPorId() {
         when(propiedadRepo.findById(1L)).thenReturn(Optional.of(propiedad));
         when(modelMapper.map(propiedad, PropiedadDTO.class)).thenReturn(propiedadDTO);
 
@@ -73,8 +86,8 @@ class PropiedadServicioTest {
     }
 
     @Test
-     void testGuardarPropiedad() {
-        when(usuarioRepo.findById(1L)).thenReturn(Optional.of(usuario));
+    void testGuardarPropiedad() {
+        when(usuarioRepo.findById(1L)).thenReturn(Optional.of(new Usuario()));
         when(modelMapper.map(propiedadDTO, Propiedad.class)).thenReturn(propiedad);
         when(propiedadRepo.save(propiedad)).thenReturn(propiedad);
         when(modelMapper.map(propiedad, PropiedadDTO.class)).thenReturn(propiedadDTO);
@@ -84,7 +97,7 @@ class PropiedadServicioTest {
     }
 
     @Test
-     void testGuardarPropiedad_InvalidPropietario() {
+    void testGuardarPropiedad_InvalidPropietario() {
         when(usuarioRepo.findById(1L)).thenReturn(Optional.empty());
 
         IllegalArgumentException thrown = assertThrows(
@@ -92,12 +105,12 @@ class PropiedadServicioTest {
             () -> propiedadServicio.guardar(propiedadDTO),
             "Expected guardar() to throw, but it didn't"
         );
-        assertEquals("El propietario con ID 1 no existe.", thrown.getMessage());
+        assertEquals("El propietario con ID 1", thrown.getMessage());
     }
 
 
     @Test
-     void testGetPropiedadPorUsuario() {
+    void testGetPropiedadPorUsuario() {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades.add(propiedad);
 
@@ -110,7 +123,7 @@ class PropiedadServicioTest {
     }
 
     @Test
-     void testDeleteById() {
+    void testDeleteById() {
         doNothing().when(propiedadRepo).deleteById(1L);
 
         assertDoesNotThrow(() -> propiedadServicio.deleteById(1L));

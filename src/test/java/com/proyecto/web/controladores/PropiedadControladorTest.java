@@ -1,6 +1,7 @@
 package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.PropiedadDTO;
+import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.modelos.TipoPropiedad;
 import com.proyecto.web.servicios.PropiedadServicio;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,15 @@ public class PropiedadControladorTest {
 
     @Test
     void getPropiedadesTest() throws Exception {
-        PropiedadDTO propiedad1 = new PropiedadDTO(1L, 500L, 1L, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
-        PropiedadDTO propiedad2 = new PropiedadDTO(2L, 300L, 2L, "Calle 456", 800.0, false, TipoPropiedad.CASA, "Casa acogedora");
+
+        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
+        usuarioDTO1.setId(1L);
+        
+        UsuarioDTO usuarioDTO2 = new UsuarioDTO();
+        usuarioDTO2.setId(2L);
+
+        PropiedadDTO propiedad1 = new PropiedadDTO(1L, 500L, usuarioDTO1, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
+        PropiedadDTO propiedad2 = new PropiedadDTO(2L, 300L, usuarioDTO2, "Calle 456", 800.0, false, TipoPropiedad.CASA, "Casa acogedora");
 
         Mockito.when(propiedadServicio.getPropiedades()).thenReturn(Arrays.asList(propiedad1, propiedad2));
 
@@ -42,7 +50,11 @@ public class PropiedadControladorTest {
 
     @Test
     void getPropiedadPorIdTest() throws Exception {
-        PropiedadDTO propiedad = new PropiedadDTO(1L, 500L, 1L, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(1L);
+
+        PropiedadDTO propiedad = new PropiedadDTO(1L, 500L, usuarioDTO, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
 
         Mockito.when(propiedadServicio.encontrarPropiedadPorId(1L)).thenReturn(Optional.of(propiedad));
 
@@ -54,7 +66,12 @@ public class PropiedadControladorTest {
 
     @Test
     void crearPropiedadTest() throws Exception {
-        PropiedadDTO propiedad = new PropiedadDTO(1L, 500L, 1L, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
+
+        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
+        usuarioDTO1.setId(1L);
+
+    
+        PropiedadDTO propiedad = new PropiedadDTO(1L, 500L, usuarioDTO1, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
 
         Mockito.when(propiedadServicio.guardar(Mockito.any(PropiedadDTO.class))).thenReturn(propiedad);
 
@@ -68,7 +85,11 @@ public class PropiedadControladorTest {
     @Test
     void actualizarPropiedadTest() throws Exception {
         Long propiedadId = 1L;
-        PropiedadDTO propiedadActualizada = new PropiedadDTO(propiedadId, 600L, 1L, "Calle 789", 1200.0, true, TipoPropiedad.FINCA, "Finca actualizada");
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(1L);
+
+        PropiedadDTO propiedadActualizada = new PropiedadDTO(propiedadId, 600L, usuarioDTO, "Calle 789", 1200.0, true, TipoPropiedad.FINCA, "Finca actualizada");
 
         Mockito.when(propiedadServicio.encontrarPropiedadPorId(propiedadId)).thenReturn(Optional.of(new PropiedadDTO()));
         Mockito.when(propiedadServicio.guardar(Mockito.any(PropiedadDTO.class))).thenReturn(propiedadActualizada);
@@ -96,8 +117,12 @@ public class PropiedadControladorTest {
     @Test
     void getPropiedadPorUsuarioTest() throws Exception {
         Long propietarioId = 1L;
-        PropiedadDTO propiedad1 = new PropiedadDTO(1L, 500L, propietarioId, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
-        PropiedadDTO propiedad2 = new PropiedadDTO(2L, 300L, propietarioId, "Calle 456", 800.0, false, TipoPropiedad.CASA, "Casa acogedora");
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(1L);
+        
+        PropiedadDTO propiedad1 = new PropiedadDTO(1L, 500L, usuarioDTO, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
+        PropiedadDTO propiedad2 = new PropiedadDTO(2L, 300L, usuarioDTO, "Calle 456", 800.0, false, TipoPropiedad.CASA, "Casa acogedora");
 
         Mockito.when(propiedadServicio.getPropiedadPorUsuario(propietarioId)).thenReturn(Arrays.asList(propiedad1, propiedad2));
 
@@ -112,8 +137,11 @@ public class PropiedadControladorTest {
     @Test
     void deletePropiedadTest() throws Exception {
         Long propiedadId = 1L;
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(1L);
     
-        PropiedadDTO propiedad = new PropiedadDTO(1L, 500L, 1L, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
+        PropiedadDTO propiedad = new PropiedadDTO(1L, 500L, usuarioDTO, "Calle 123", 1000.0, true, TipoPropiedad.FINCA, "Hermosa finca");
     
         Mockito.when(propiedadServicio.encontrarPropiedadPorId(propiedadId)).thenReturn(Optional.of(propiedad));
         Mockito.doNothing().when(propiedadServicio).deleteById(propiedadId);

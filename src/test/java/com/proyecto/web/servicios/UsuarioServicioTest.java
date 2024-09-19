@@ -1,9 +1,14 @@
 package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.UsuarioDTO;
+import com.proyecto.web.modelos.Alquiler;
+import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.modelos.TipoUsuario;
 import com.proyecto.web.modelos.Usuario;
+import com.proyecto.web.repositorios.AlquilerRepositorio;
+import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +29,13 @@ class UsuarioServicioTest {
     private UsuarioRepositorio usuarioRepo;
 
     @Mock
+    private PropiedadRepositorio propiedadRepo;
+
+    @Mock
     private ModelMapper modelMapper;
+
+    @Mock
+    private AlquilerRepositorio alquilerRepo;
 
     @InjectMocks
     private UsuarioServicio usuarioServicio;
@@ -106,12 +117,23 @@ class UsuarioServicioTest {
 
     @Test
     void testDeleteById() {
+        // Configurar el comportamiento esperado del mock
+        List<Alquiler> emptyAlquilerList = new ArrayList<>();
+        List<Propiedad> emptyPropiedadList = new ArrayList<>();
+        
+        when(alquilerRepo.findByUsuarioAsignado_Id(1L)).thenReturn(emptyAlquilerList);
+        when(propiedadRepo.findByPropietarioId(1L)).thenReturn(emptyPropiedadList);
+
         doNothing().when(usuarioRepo).deleteById(1L);
 
         assertDoesNotThrow(() -> usuarioServicio.deleteById(1L));
+
+        verify(alquilerRepo, times(1)).findByUsuarioAsignado_Id(1L);
+        verify(alquilerRepo, times(1)).deleteAll(emptyAlquilerList);
+        verify(propiedadRepo, times(1)).findByPropietarioId(1L);
+        verify(propiedadRepo, times(1)).deleteAll(emptyPropiedadList);
         verify(usuarioRepo, times(1)).deleteById(1L);
     }
-
     @Test
     void testFindById_NotFound() {
         when(usuarioRepo.findById(1L)).thenReturn(Optional.empty());

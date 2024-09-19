@@ -4,7 +4,6 @@ import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.UsuarioServicio;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,6 @@ public class UsuarioControlador {
 
     private static final String NOT_FOUND_MESSAGE = "Not found User with id = ";
 
-    @Autowired
     public UsuarioControlador(UsuarioServicio usuarioServicio) {
         this.usuarioServicio = usuarioServicio;
     }

@@ -2,9 +2,9 @@ package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.modelos.Propiedad;
+import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 import org.modelmapper.ModelMapper;
@@ -25,7 +25,6 @@ public class PropiedadServicio {
     private static final String AREA_INVALIDA = "El área no puede ser menor o igual a 0";
     private static final String PRECIO_INVALIDO = "El precio no puede ser menor a 0";
 
-    @Autowired
     public PropiedadServicio(PropiedadRepositorio propiedadRepo, UsuarioRepositorio usuarioRepo, ModelMapper modelMapper) {
         this.propiedadRepo = propiedadRepo;
         this.usuarioRepo = usuarioRepo;
@@ -44,20 +43,24 @@ public class PropiedadServicio {
     }
 
     public PropiedadDTO guardar(PropiedadDTO propiedadDTO) {
-        if (!usuarioRepo.findById(propiedadDTO.getPropietarioId()).isPresent()) {
-            throw new IllegalArgumentException(PROPIETARIO_NO_EXISTE + propiedadDTO.getPropietarioId() + " no existe.");
-        }
+        Usuario propietario = usuarioRepo.findById(propiedadDTO.getPropietario().getId())
+            .orElseThrow(() -> new IllegalArgumentException(PROPIETARIO_NO_EXISTE + propiedadDTO.getPropietario().getId()));
 
         Propiedad propiedad = convertToEntity(propiedadDTO);
+        propiedad.setPropietario(propietario);
+
         if (propiedad.getArea() <= 0L) {
             throw new IllegalArgumentException(AREA_INVALIDA);
         }
         if (propiedad.getPrecio() < 0L) {
             throw new IllegalArgumentException(PRECIO_INVALIDO);
         }
+
         Propiedad savedPropiedad = propiedadRepo.save(propiedad);
+
         return convertToDto(savedPropiedad);
     }
+
 
     public List<PropiedadDTO> getPropiedadPorUsuario(Long propietarioId) {
         return propiedadRepo.findByPropietarioId(propietarioId).stream()

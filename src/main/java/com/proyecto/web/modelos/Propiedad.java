@@ -1,12 +1,6 @@
 package com.proyecto.web.modelos;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,8 +20,9 @@ public class Propiedad {
     @Column(nullable = false)
     private long area;
 
-    @Column(nullable = false)
-    private Long propietarioId;
+    @ManyToOne
+    @JoinColumn(name = "propietario", nullable = false)
+    private Usuario propietario;
 
     @Column(nullable = false)
     private String direccion;
