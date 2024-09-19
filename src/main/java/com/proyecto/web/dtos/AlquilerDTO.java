@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class AlquilerDTO {
 
     private Long id;
-    private UsuarioDTO usuarioAsignado; 
+    private UsuarioAuxDTO usuarioAsignado; 
     private PropiedadDTO propiedad; 
     private LocalDate fechaInicio;
     private LocalDate fechaFin;

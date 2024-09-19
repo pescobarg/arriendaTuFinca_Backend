@@ -1,7 +1,7 @@
 package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.PropiedadDTO;
-import com.proyecto.web.dtos.UsuarioDTO; 
+import com.proyecto.web.dtos.UsuarioAuxDTO; 
 import com.proyecto.web.modelos.TipoPropiedad;
 import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.modelos.Usuario;
@@ -37,7 +37,7 @@ class PropiedadServicioTest {
 
     private Propiedad propiedad;
     private PropiedadDTO propiedadDTO;
-    private UsuarioDTO usuarioDTO; 
+    private UsuarioAuxDTO usuarioAuxDTO; 
 
     @BeforeEach
     void setUp() {
@@ -46,15 +46,15 @@ class PropiedadServicioTest {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
 
-        usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(1L);
+        usuarioAuxDTO = new UsuarioAuxDTO();
+        usuarioAuxDTO.setId(1L);
 
         propiedad = new Propiedad(1L, 100L, usuario, "direccion", 50000.0, true, TipoPropiedad.APARTAMENTO, "descripcion");
 
         propiedadDTO = new PropiedadDTO();
         propiedadDTO.setId(1L);
         propiedadDTO.setArea(100L);
-        propiedadDTO.setPropietario(usuarioDTO); // Usa UsuarioDTO
+        propiedadDTO.setPropietario(usuarioAuxDTO); // Usa UsuarioDTO
         propiedadDTO.setDireccion("direccion");
         propiedadDTO.setPrecio(50000.0);
         propiedadDTO.setDisponible(true);

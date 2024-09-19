@@ -2,6 +2,8 @@ package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.modelos.Alquiler;
+import com.proyecto.web.modelos.Propiedad;
+import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.repositorios.AlquilerRepositorio;
 import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
@@ -61,19 +63,45 @@ public class AlquilerServicio {
     }
 
     public AlquilerDTO save(AlquilerDTO alquilerDTO) {
+        // Obtén el usuario a partir del DTO
+        Usuario usuario = usuarioRepo.findById(alquilerDTO.getUsuarioAsignado().getId())
+            .orElseThrow(() -> new IllegalArgumentException("El ID del usuario no existe: " + alquilerDTO.getUsuarioAsignado().getId()));
+
+        // Verificar si el ID de la propiedad existe
         if (!propiedadRepo.existsById(alquilerDTO.getPropiedad().getId())) {
             throw new IllegalArgumentException("El ID de la propiedad no existe: " + alquilerDTO.getPropiedad().getId());
         }
+
+        // Obtener la propiedad para verificar su disponibilidad
+        Propiedad propiedad = propiedadRepo.findById(alquilerDTO.getPropiedad().getId())
+                .orElseThrow(() -> new IllegalArgumentException("La propiedad no existe: " + alquilerDTO.getPropiedad().getId()));
+
+        // Verificar si la propiedad está disponible
+        if (!propiedad.isDisponible()) {
+            throw new IllegalArgumentException("La propiedad no está disponible para alquiler: " + propiedad.getId());
+        }
+
+        propiedad.setDisponible(false);
+        propiedadRepo.save(propiedad); // Guarda la propiedad actualizada
+
+        // Verificar si el ID del usuario existe
         if (!usuarioRepo.existsById(alquilerDTO.getUsuarioAsignado().getId())) {
             throw new IllegalArgumentException("El ID del usuario no existe: " + alquilerDTO.getUsuarioAsignado().getId());
         }
-    
-        Alquiler alquiler = modelMapper.map(alquilerDTO, Alquiler.class);
+
+        // Crea el alquiler usando los objetos obtenidos
+        Alquiler alquiler = new Alquiler();
+        alquiler.setUsuarioAsignado(usuario);
+        alquiler.setPropiedad(propiedad);
+        alquiler.setFechaInicio(alquilerDTO.getFechaInicio());
+        alquiler.setFechaFin(alquilerDTO.getFechaFin());
+        alquiler.setEstado(alquilerDTO.getEstado());
+        alquiler.setComentarios(alquilerDTO.getComentarios());
+
+        // Guarda el alquiler y convierte a DTO
         Alquiler savedAlquiler = alquilerRepo.save(alquiler);
         return modelMapper.map(savedAlquiler, AlquilerDTO.class);
     }
-    
-
 
     public void deleteById(Long id) {
         alquilerRepo.deleteById(id);

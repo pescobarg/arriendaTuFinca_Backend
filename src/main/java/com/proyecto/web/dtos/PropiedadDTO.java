@@ -14,7 +14,7 @@ public class PropiedadDTO {
 
     private Long id;
     private long area;
-    private UsuarioDTO propietario; 
+    private UsuarioAuxDTO propietario; 
     private String direccion;
     private double precio;
     private boolean disponible;

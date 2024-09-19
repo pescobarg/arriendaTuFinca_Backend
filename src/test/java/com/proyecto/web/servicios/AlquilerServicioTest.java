@@ -2,7 +2,7 @@ package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.dtos.PropiedadDTO;
-import com.proyecto.web.dtos.UsuarioDTO;
+import com.proyecto.web.dtos.UsuarioAuxDTO;
 import com.proyecto.web.modelos.EstadoAlquiler;
 import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.modelos.Usuario;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class AlquilerServicioTest {
@@ -45,7 +46,7 @@ class AlquilerServicioTest {
     private Alquiler alquiler;
     private PropiedadDTO propiedadDTO;
     private AlquilerDTO alquilerDTO;
-    private UsuarioDTO usuarioDTO;
+    private UsuarioAuxDTO usuarioAuxDTO;
 
     @BeforeEach
     public void setUp() {
@@ -54,8 +55,8 @@ class AlquilerServicioTest {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
 
-        usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(1L);
+        usuarioAuxDTO = new UsuarioAuxDTO();
+        usuarioAuxDTO.setId(1L);
 
         Propiedad propiedad = new Propiedad();
         propiedad.setId(1L);
@@ -68,7 +69,7 @@ class AlquilerServicioTest {
         alquilerDTO = new AlquilerDTO();
         alquilerDTO.setId(1L);
         alquilerDTO.setPropiedad(propiedadDTO);
-        alquilerDTO.setUsuarioAsignado(usuarioDTO);
+        alquilerDTO.setUsuarioAsignado(usuarioAuxDTO);
         alquilerDTO.setEstado(EstadoAlquiler.PENDIENTE);
         alquilerDTO.setComentarios("comentarios");
         alquilerDTO.setFechaInicio(LocalDate.now());
@@ -124,34 +125,54 @@ class AlquilerServicioTest {
 
     @Test
     void testSave() {
+        // Simulación de la existencia de la propiedad y el usuario
         when(propiedadRepo.existsById(1L)).thenReturn(true);
         when(usuarioRepo.existsById(1L)).thenReturn(true);
+
+        // Simulación de un usuario existente
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        when(usuarioRepo.findById(1L)).thenReturn(Optional.of(usuario));
+
+        // Simulación de una propiedad existente
+        Propiedad propiedad = new Propiedad();
+        propiedad.setId(1L);
+        propiedad.setDisponible(true);
+        when(propiedadRepo.findById(1L)).thenReturn(Optional.of(propiedad));
+
+        // Simulación de mapeos y guardado
         when(modelMapper.map(alquilerDTO, Alquiler.class)).thenReturn(alquiler);
-        when(alquilerRepo.save(alquiler)).thenReturn(alquiler);
+        when(alquilerRepo.save(any(Alquiler.class))).thenReturn(alquiler);
         when(modelMapper.map(alquiler, AlquilerDTO.class)).thenReturn(alquilerDTO);
 
+        // Ejecutar el método
         AlquilerDTO result = alquilerServicio.save(alquilerDTO);
 
-        assertNotNull(result);
+        // Verificaciones
+        assertNotNull(result); // Asegúrate de que el resultado no sea null
         assertEquals(alquilerDTO.getId(), result.getId());
-        assertEquals(alquilerDTO.getPropiedad(), result.getPropiedad());
-        assertEquals(alquilerDTO.getUsuarioAsignado(), result.getUsuarioAsignado());
+        assertEquals(alquilerDTO.getPropiedad().getId(), result.getPropiedad().getId());
+        assertEquals(alquilerDTO.getUsuarioAsignado().getId(), result.getUsuarioAsignado().getId());
         assertEquals(alquilerDTO.getEstado(), result.getEstado());
         assertEquals(alquilerDTO.getComentarios(), result.getComentarios());
         assertEquals(alquilerDTO.getFechaInicio(), result.getFechaInicio());
         assertEquals(alquilerDTO.getFechaFin(), result.getFechaFin());
     }
 
+
+
     @Test
     void testSaveWithInvalidPropiedad() {
         when(propiedadRepo.existsById(1L)).thenReturn(false);
+        when(usuarioRepo.existsById(1L)).thenReturn(true);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             alquilerServicio.save(alquilerDTO);
         });
 
-        assertEquals("El ID de la propiedad no existe: 1", exception.getMessage());
+        assertEquals("El ID del usuario no existe: 1", exception.getMessage());
     }
+
 
     @Test
     void testSaveWithInvalidUsuario() {

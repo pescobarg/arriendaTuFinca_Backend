@@ -2,7 +2,7 @@ package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.dtos.PropiedadDTO;
-import com.proyecto.web.dtos.UsuarioDTO;
+import com.proyecto.web.dtos.UsuarioAuxDTO;
 import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.modelos.EstadoAlquiler;
 import com.proyecto.web.servicios.AlquilerServicio;
@@ -35,11 +35,11 @@ public class AlquilerControladorTest {
     @Test
     void getAllAlquileresTest() throws Exception {
 
-        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
-        usuarioDTO1.setId(1L);
+        UsuarioAuxDTO usuarioAuxDTO1 = new UsuarioAuxDTO();
+        usuarioAuxDTO1.setId(1L);
 
-        UsuarioDTO usuarioDTO2 = new UsuarioDTO();
-        usuarioDTO2.setId(2L);
+        UsuarioAuxDTO usuarioAuxDTO2 = new UsuarioAuxDTO();
+        usuarioAuxDTO2.setId(2L);
 
         PropiedadDTO propiedadDTO1 = new PropiedadDTO();
         propiedadDTO1.setId(1L);
@@ -47,8 +47,8 @@ public class AlquilerControladorTest {
         PropiedadDTO propiedadDTO2 = new PropiedadDTO();
         propiedadDTO2.setId(2L);
         
-        AlquilerDTO alquiler1 = new AlquilerDTO(1L, usuarioDTO1, propiedadDTO1, LocalDate.now(), LocalDate.now().plusDays(5),EstadoAlquiler.PENDIENTE, "Comentario 1");
-        AlquilerDTO alquiler2 = new AlquilerDTO(2L, usuarioDTO2, propiedadDTO2, LocalDate.now(), LocalDate.now().plusDays(3),EstadoAlquiler.APROBADO, "Comentario 2");
+        AlquilerDTO alquiler1 = new AlquilerDTO(1L, usuarioAuxDTO1, propiedadDTO1, LocalDate.now(), LocalDate.now().plusDays(5),EstadoAlquiler.PENDIENTE, "Comentario 1");
+        AlquilerDTO alquiler2 = new AlquilerDTO(2L, usuarioAuxDTO2, propiedadDTO2, LocalDate.now(), LocalDate.now().plusDays(3),EstadoAlquiler.APROBADO, "Comentario 2");
 
         Mockito.when(alquilerServicio.findAll()).thenReturn(Arrays.asList(alquiler1, alquiler2));
 
@@ -61,12 +61,12 @@ public class AlquilerControladorTest {
 
     @Test
     void getAlquilerPorIdTest() throws Exception {
-        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
-        usuarioDTO1.setId(1L);
+        UsuarioAuxDTO usuarioAuxDTO1 = new UsuarioAuxDTO();
+        usuarioAuxDTO1.setId(1L);
         PropiedadDTO propiedadDTO1 = new PropiedadDTO();
         propiedadDTO1.setId(1L);
         
-        AlquilerDTO alquiler = new AlquilerDTO(1L, usuarioDTO1, propiedadDTO1, LocalDate.now(), LocalDate.now().plusDays(5),EstadoAlquiler.PENDIENTE, "Comentario 1");
+        AlquilerDTO alquiler = new AlquilerDTO(1L, usuarioAuxDTO1, propiedadDTO1, LocalDate.now(), LocalDate.now().plusDays(5),EstadoAlquiler.PENDIENTE, "Comentario 1");
 
         Mockito.when(alquilerServicio.findById(1L)).thenReturn(Optional.of(alquiler));
 
@@ -79,10 +79,10 @@ public class AlquilerControladorTest {
     @Test
     void getAlquileresPorUsuarioTest() throws Exception {
 
-        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
+        UsuarioAuxDTO usuarioDTO1 = new UsuarioAuxDTO();
         usuarioDTO1.setId(1L);
 
-        UsuarioDTO usuarioDTO2 = new UsuarioDTO();
+        UsuarioAuxDTO usuarioDTO2 = new UsuarioAuxDTO();
         usuarioDTO2.setId(2L);
 
         PropiedadDTO propiedadDTO1 = new PropiedadDTO();
@@ -106,11 +106,11 @@ public class AlquilerControladorTest {
 
     @Test
     void getAlquileresPorPropiedadTest() throws Exception {
-        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
-        usuarioDTO1.setId(1L);
+        UsuarioAuxDTO usuarioAuxDTO1 = new UsuarioAuxDTO();
+        usuarioAuxDTO1.setId(1L);
 
-        UsuarioDTO usuarioDTO2 = new UsuarioDTO();
-        usuarioDTO2.setId(2L);
+        UsuarioAuxDTO usuarioAuxDTO2 = new UsuarioAuxDTO();
+        usuarioAuxDTO2.setId(2L);
 
         PropiedadDTO propiedadDTO1 = new PropiedadDTO();
         propiedadDTO1.setId(1L);
@@ -118,8 +118,8 @@ public class AlquilerControladorTest {
         PropiedadDTO propiedadDTO2 = new PropiedadDTO();
         propiedadDTO2.setId(2L);
         
-        AlquilerDTO alquiler1 = new AlquilerDTO(1L, usuarioDTO1, propiedadDTO1, LocalDate.now(), LocalDate.now().plusDays(5),EstadoAlquiler.PENDIENTE, "Comentario 1");
-        AlquilerDTO alquiler2 = new AlquilerDTO(2L, usuarioDTO2, propiedadDTO2, LocalDate.now(), LocalDate.now().plusDays(3),EstadoAlquiler.APROBADO, "Comentario 2");
+        AlquilerDTO alquiler1 = new AlquilerDTO(1L, usuarioAuxDTO1, propiedadDTO1, LocalDate.now(), LocalDate.now().plusDays(5),EstadoAlquiler.PENDIENTE, "Comentario 1");
+        AlquilerDTO alquiler2 = new AlquilerDTO(2L, usuarioAuxDTO2, propiedadDTO2, LocalDate.now(), LocalDate.now().plusDays(3),EstadoAlquiler.APROBADO, "Comentario 2");
 
         Mockito.when(alquilerServicio.findByPropiedadId(1L)).thenReturn(Arrays.asList(alquiler1, alquiler2));
 
@@ -133,10 +133,10 @@ public class AlquilerControladorTest {
 
     @Test
     void actualizarAlquilerTest() throws Exception {
-        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
+        UsuarioAuxDTO usuarioDTO1 = new UsuarioAuxDTO();
         usuarioDTO1.setId(1L);
 
-        UsuarioDTO usuarioDTO2 = new UsuarioDTO();
+        UsuarioAuxDTO usuarioDTO2 = new UsuarioAuxDTO();
         usuarioDTO2.setId(2L);
 
         PropiedadDTO propiedadDTO1 = new PropiedadDTO();
@@ -179,7 +179,7 @@ public class AlquilerControladorTest {
 
     @Test
     void crearAlquilerTest() throws Exception {
-        UsuarioDTO usuarioDTO1 = new UsuarioDTO();
+        UsuarioAuxDTO usuarioDTO1 = new UsuarioAuxDTO();
         usuarioDTO1.setId(1L);
         PropiedadDTO propiedadDTO1 = new PropiedadDTO();
         propiedadDTO1.setId(1L);
