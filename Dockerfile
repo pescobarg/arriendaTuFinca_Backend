@@ -14,4 +14,4 @@ RUN ./mvnw clean install -DskipTests
 
 
 # Ejecuta la aplicación Spring Boot cuando se inicia el contenedor
-CMD ["java", "-jar", "target/imagen_back.jar"]
+CMD ["java", "-jar", "target/web-0.0.1-SNAPSHOT.jar"]
