@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: arrienda_back
+  name: arrienda-back
   namespace: back
 spec:
   selector:
     matchLabels:
-      app: arrienda_back
+      app: arrienda-back
   replicas: 1
   template:
     metadata:
       labels:
-         app: arrienda_back
+         app: arrienda-back
     spec:
       imagePullSecrets:
          - name: github-secret
@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: arrienda_back
+  name: arrienda-back
   namespace: back
 spec:
   selector:
-    app: arrienda_back
+    app: arrienda-back
   ports:
     - protocol: TCP
       port: 8080
