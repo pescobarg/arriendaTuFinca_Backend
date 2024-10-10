@@ -113,4 +113,16 @@ public class UsuarioControlador {
         usuarioAuxDTO.setComentarios(usuarioDTO.getComentarios());
         return usuarioAuxDTO;
     }
+
+    @GetMapping("/checkMail/{correo}")
+    public String revisarCorreo(@PathVariable String correo) {
+        return usuarioServicio.revisarCorreo(correo);
+    }
+
+    @GetMapping("/checkPassword/{contrasenia}/{correo}")
+    public String revisarContrasenia(@PathVariable String contrasenia, @PathVariable String correo) {
+
+        return usuarioServicio.revisarContrasenia(contrasenia,correo);
+    }
+
 }
