@@ -21,7 +21,7 @@ public class Propiedad {
     private long area;
 
     @ManyToOne
-    @JoinColumn(name = "propietario_id", nullable = false)
+    @JoinColumn(name = "propietario", nullable = false)
     private Usuario propietario;
 
     @Column(nullable = false)
