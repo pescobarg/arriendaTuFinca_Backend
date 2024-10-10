@@ -69,4 +69,6 @@ public class UsuarioServicio {
     private Usuario convertToEntity(UsuarioDTO usuarioDTO) {
         return modelMapper.map(usuarioDTO, Usuario.class);
     }
+
+
 }

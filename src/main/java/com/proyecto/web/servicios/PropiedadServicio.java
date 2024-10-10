@@ -44,15 +44,12 @@ public class PropiedadServicio {
     }
 
     public PropiedadDTO guardar(PropiedadDTO propiedadDTO) {
-        // Validar que el propietario exista
         Usuario propietario = usuarioRepo.findById(propiedadDTO.getPropietario().getId())
             .orElseThrow(() -> new IllegalArgumentException(PROPIETARIO_NO_EXISTE + propiedadDTO.getPropietario().getId()));
     
-        // Convertir DTO a entidad
         Propiedad propiedad = convertToEntity(propiedadDTO);
-        propiedad.setPropietario(propietario); // Asignar el propietario
+        propiedad.setPropietario(propietario); 
     
-        // Validar el área y precio
         if (propiedad.getArea() <= 0L) {
             throw new IllegalArgumentException(AREA_INVALIDA);
         }
@@ -60,9 +57,8 @@ public class PropiedadServicio {
             throw new IllegalArgumentException(PRECIO_INVALIDO);
         }
     
-        // Guardar la propiedad
         Propiedad savedPropiedad = propiedadRepo.save(propiedad);
-        return convertToDto(savedPropiedad); // Devolver DTO
+        return convertToDto(savedPropiedad); 
     }
     
 
@@ -79,11 +75,10 @@ public class PropiedadServicio {
 
     private PropiedadDTO convertToDto(Propiedad propiedad) {
         PropiedadDTO dto = modelMapper.map(propiedad, PropiedadDTO.class);
-        dto.setPropietario(convertirAUsuarioAuxDTO(propiedad.getPropietario())); // Usar el método de conversión aquí
+        dto.setPropietario(convertirAUsuarioAuxDTO(propiedad.getPropietario())); 
         return dto;
     }
 
-    // Método de conversión para el propietario
     private UsuarioAuxDTO convertirAUsuarioAuxDTO(Usuario usuario) {
         UsuarioAuxDTO usuarioAuxDTO = new UsuarioAuxDTO();
         usuarioAuxDTO.setId(usuario.getId());
@@ -99,4 +94,9 @@ public class PropiedadServicio {
     private Propiedad convertToEntity(PropiedadDTO propiedadDTO) {
         return modelMapper.map(propiedadDTO, Propiedad.class);
     }
+
+    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobado() {
+        return propiedadRepo.findAllPropiedadesNoAprobadas(); 
+    }
+    
 }

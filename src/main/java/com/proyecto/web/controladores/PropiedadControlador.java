@@ -2,6 +2,7 @@ package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.errores.ResourceNotFound;
+import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.servicios.PropiedadServicio;
 
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/propiedades")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PropiedadControlador {
 
     private final PropiedadServicio propiedadServicio;
@@ -63,4 +65,10 @@ public class PropiedadControlador {
     public List<PropiedadDTO> getPropiedadPorUsuario(@PathVariable Long propietarioId) {
         return propiedadServicio.getPropiedadPorUsuario(propietarioId);
     }
+
+    @GetMapping("/sin-alquiler-aprobado")
+    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobado() {
+        return propiedadServicio.obtenerPropiedadesSinAlquilerAprobado();
+    }
+    
 }
