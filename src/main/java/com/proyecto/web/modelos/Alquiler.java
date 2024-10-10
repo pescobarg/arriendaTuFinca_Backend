@@ -20,11 +20,11 @@ public class Alquiler {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuarioAsignado", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuarioAsignado;
 
     @ManyToOne
-    @JoinColumn(name = "propiedad", nullable = false)
+    @JoinColumn(name = "propiedad_id", nullable = false)
     private Propiedad propiedad;
 
     @Column(nullable = false)
