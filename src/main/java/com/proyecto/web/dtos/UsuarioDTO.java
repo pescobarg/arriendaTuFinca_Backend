@@ -1,7 +1,5 @@
 package com.proyecto.web.dtos;
 
-import com.proyecto.web.modelos.TipoUsuario;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +16,5 @@ public class UsuarioDTO {
     private String correo;
     private String contrasenia;
     private int edad;
-    private TipoUsuario tipoUsuario;
     private String comentarios;
 }

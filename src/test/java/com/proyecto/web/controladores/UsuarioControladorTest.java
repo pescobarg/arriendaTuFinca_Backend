@@ -1,7 +1,6 @@
 package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.UsuarioDTO;
-import com.proyecto.web.modelos.TipoUsuario;
 import com.proyecto.web.servicios.UsuarioServicio;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,8 +27,8 @@ public class UsuarioControladorTest {
 
     @Test
     void getUsuariosTest() throws Exception {
-        UsuarioDTO usuario1 = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, TipoUsuario.ARRENDADOR, "Comentario 1");
-        UsuarioDTO usuario2 = new UsuarioDTO(2L, "Maria", "Lopez", "maria@example.com", "password456", 25, TipoUsuario.ARRENDATARIO, "Comentario 2");
+        UsuarioDTO usuario1 = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, "Comentario 1");
+        UsuarioDTO usuario2 = new UsuarioDTO(2L, "Maria", "Lopez", "maria@example.com", "password456", 25, "Comentario 2");
 
         Mockito.when(usuarioServicio.findAll()).thenReturn(Arrays.asList(usuario1, usuario2));
 
@@ -42,7 +41,7 @@ public class UsuarioControladorTest {
 
     @Test
     void getUsuarioPorIdTest() throws Exception {
-        UsuarioDTO usuario = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, TipoUsuario.ARRENDADOR, "Comentario 1");
+        UsuarioDTO usuario = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, "Comentario 1");
 
         Mockito.when(usuarioServicio.findById(1L)).thenReturn(Optional.of(usuario));
 
@@ -56,7 +55,7 @@ public class UsuarioControladorTest {
 
     @Test
     void crearUsuarioTest() throws Exception {
-        UsuarioDTO usuario = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, TipoUsuario.ARRENDADOR, "Comentario 1");
+        UsuarioDTO usuario = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, "Comentario 1");
 
         Mockito.when(usuarioServicio.save(Mockito.any(UsuarioDTO.class))).thenReturn(usuario);
 
@@ -74,10 +73,10 @@ void actualizarUsuarioTest() throws Exception {
     Long usuarioId = 1L;
     
     // Objeto con datos previos
-    UsuarioDTO usuarioPrevio = new UsuarioDTO(usuarioId, "Juan", "Perez", "juan@example.com", "password123", 30, TipoUsuario.ARRENDADOR, "Comentario 1");
+    UsuarioDTO usuarioPrevio = new UsuarioDTO(usuarioId, "Juan", "Perez", "juan@example.com", "password123", 30, "Comentario 1");
     
     // Objeto actualizado
-    UsuarioDTO usuarioActualizado = new UsuarioDTO(usuarioId, "Juan", "Perez", "juan@example.com", "password123", 30, TipoUsuario.ARRENDADOR, "Comentario actualizado");
+    UsuarioDTO usuarioActualizado = new UsuarioDTO(usuarioId, "Juan", "Perez", "juan@example.com", "password123", 30, "Comentario actualizado");
 
     // Configuración del mock
     Mockito.when(usuarioServicio.findById(usuarioId)).thenReturn(Optional.of(usuarioPrevio));
@@ -107,7 +106,7 @@ void actualizarUsuarioTest() throws Exception {
 
     @Test
     void eliminarUsuarioTest() throws Exception {
-        UsuarioDTO usuario = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, TipoUsuario.ARRENDADOR, "Comentario 1");
+        UsuarioDTO usuario = new UsuarioDTO(1L, "Juan", "Perez", "juan@example.com", "password123", 30, "Comentario 1");
     
         Mockito.when(usuarioServicio.findById(1L)).thenReturn(Optional.of(usuario));
         Mockito.doNothing().when(usuarioServicio).deleteById(1L);

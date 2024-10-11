@@ -3,7 +3,6 @@ package com.proyecto.web.servicios;
 import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.modelos.Alquiler;
 import com.proyecto.web.modelos.Propiedad;
-import com.proyecto.web.modelos.TipoUsuario;
 import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.repositorios.AlquilerRepositorio;
 import com.proyecto.web.repositorios.PropiedadRepositorio;
@@ -54,7 +53,6 @@ class UsuarioServicioTest {
         usuario.setCorreo("john.doe@example.com");
         usuario.setContrasenia("password");
         usuario.setEdad(25);
-        usuario.setTipoUsuario(TipoUsuario.ARRENDADOR);
         usuario.setComentarios("Sin comentarios");
 
         usuarioDTO = new UsuarioDTO();
@@ -64,7 +62,6 @@ class UsuarioServicioTest {
         usuarioDTO.setCorreo("john.doe@example.com");
         usuarioDTO.setContrasenia("password");
         usuarioDTO.setEdad(25);
-        usuarioDTO.setTipoUsuario(TipoUsuario.ARRENDATARIO);
         usuarioDTO.setComentarios("Sin comentarios");
     }
 

@@ -86,7 +86,6 @@ public class PropiedadServicio {
         usuarioAuxDTO.setApellido(usuario.getApellido());
         usuarioAuxDTO.setCorreo(usuario.getCorreo());
         usuarioAuxDTO.setEdad(usuario.getEdad());
-        usuarioAuxDTO.setTipoUsuario(usuario.getTipoUsuario());
         usuarioAuxDTO.setComentarios(usuario.getComentarios());
         return usuarioAuxDTO;
     }
