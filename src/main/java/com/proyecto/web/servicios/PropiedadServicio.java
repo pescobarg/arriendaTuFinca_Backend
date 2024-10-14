@@ -53,7 +53,7 @@ public class PropiedadServicio {
         if (propiedad.getArea() <= 0L) {
             throw new IllegalArgumentException(AREA_INVALIDA);
         }
-        if (propiedad.getPrecio() < 0L) {
+        if (propiedad.getValorNoche() < 0L) {
             throw new IllegalArgumentException(PRECIO_INVALIDO);
         }
     
@@ -86,7 +86,6 @@ public class PropiedadServicio {
         usuarioAuxDTO.setApellido(usuario.getApellido());
         usuarioAuxDTO.setCorreo(usuario.getCorreo());
         usuarioAuxDTO.setEdad(usuario.getEdad());
-        usuarioAuxDTO.setComentarios(usuario.getComentarios());
         return usuarioAuxDTO;
     }
 

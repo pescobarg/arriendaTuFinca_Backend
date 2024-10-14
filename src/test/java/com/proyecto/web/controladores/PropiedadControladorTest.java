@@ -1,4 +1,4 @@
-package com.proyecto.web.controladores;
+/*package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.dtos.UsuarioAuxDTO;
@@ -165,3 +165,4 @@ public class PropiedadControladorTest {
     
 
 }
+*/

@@ -18,6 +18,9 @@ public class Propiedad {
     private Long id;
 
     @Column(nullable = false)
+    private String nombre;
+
+    @Column(nullable = false)
     private long area;
 
     @ManyToOne
@@ -25,10 +28,11 @@ public class Propiedad {
     private Usuario propietario;
 
     @Column(nullable = false)
-    private String direccion;
+    private String ciudad;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private double precio;
+    private TipoIngreso tipoIngreso;
 
     @Column(nullable = false)
     private boolean disponible;
@@ -37,6 +41,24 @@ public class Propiedad {
     @Column(nullable = false)
     private TipoPropiedad tipoPropiedad;
 
-    @Column
+    @Column(nullable = false)
     private String descripcion;
+
+    @Column(nullable = false)
+    private long cantidadHabitaciones;
+
+    @Column(nullable = false)
+    private long cantidadBanios;
+
+    @Column(nullable = false)
+    private boolean aceptaMascotas;
+
+    @Column(nullable = false)
+    private boolean tienePiscina;
+
+    @Column(nullable = false)
+    private boolean tieneAsador;
+
+    @Column(nullable = false)
+    private double valorNoche;
 }

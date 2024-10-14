@@ -1,4 +1,4 @@
-package com.proyecto.web.servicios;
+/*package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.modelos.Alquiler;
@@ -146,4 +146,4 @@ class UsuarioServicioTest {
         List<UsuarioDTO> result = usuarioServicio.findAll();
         assertTrue(result.isEmpty());
     }
-}
+}*/

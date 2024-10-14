@@ -16,5 +16,4 @@ public class UsuarioDTO {
     private String correo;
     private String contrasenia;
     private int edad;
-    private String comentarios;
 }

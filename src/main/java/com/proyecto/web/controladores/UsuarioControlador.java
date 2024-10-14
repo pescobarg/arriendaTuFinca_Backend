@@ -72,11 +72,6 @@ public class UsuarioControlador {
             haCambiado = true;
         }
 
-        if (!usuarioExistente.getComentarios().equals(usuarioDTO.getComentarios())) {
-            usuarioExistente.setComentarios(usuarioDTO.getComentarios());
-            haCambiado = true;
-        }
-
         // Guardar cambios solo si ha habido cambios
         if (haCambiado) {
             usuarioServicio.save(usuarioExistente);
@@ -104,7 +99,6 @@ public class UsuarioControlador {
         usuarioAuxDTO.setApellido(usuarioDTO.getApellido());
         usuarioAuxDTO.setCorreo(usuarioDTO.getCorreo());
         usuarioAuxDTO.setEdad(usuarioDTO.getEdad());
-        usuarioAuxDTO.setComentarios(usuarioDTO.getComentarios());
         return usuarioAuxDTO;
     }
 
@@ -118,5 +112,4 @@ public class UsuarioControlador {
 
         return usuarioServicio.revisarContrasenia(contrasenia,correo);
     }
-
 }

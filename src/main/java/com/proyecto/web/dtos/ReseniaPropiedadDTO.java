@@ -9,10 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioAuxDTO {
+public class ReseniaPropiedadDTO {
+
     private Long id;
-    private String nombre;
-    private String apellido;
-    private String correo;
-    private int edad;
+    private UsuarioAuxDTO usuarioCalificadorId; 
+    private PropiedadDTO propiedadObjetivoId; 
+    private int calificacion;
+    private String comentario;
+
 }
