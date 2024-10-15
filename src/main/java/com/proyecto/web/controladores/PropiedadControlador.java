@@ -66,9 +66,9 @@ public class PropiedadControlador {
         return propiedadServicio.getPropiedadPorUsuario(propietarioId);
     }
 
-    @GetMapping("/sin-alquiler-aprobado")
-    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobado() {
-        return propiedadServicio.obtenerPropiedadesSinAlquilerAprobado();
+    @GetMapping("/usuario/{propietarioId}/sin-alquiler-aprobado")
+    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobado(@PathVariable Long propietarioId) {
+        return propiedadServicio.obtenerPropiedadesSinAlquilerAprobadoPorPropietario(propietarioId);
     }
     
 }

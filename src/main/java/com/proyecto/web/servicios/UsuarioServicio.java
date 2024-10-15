@@ -70,13 +70,13 @@ public class UsuarioServicio {
         return modelMapper.map(usuarioDTO, Usuario.class);
     }
 
-    public String revisarCorreo(String correo) {
+    public Usuario revisarCorreo(String correo) {
         Optional<Usuario> usuario = usuarioRepo.findByCorreo(correo);
-        return usuario.isPresent() ? "Correo Encontrado" : "Correo No Encontrado";
+        return usuario.orElse(null);
     }
 
-    public String revisarContrasenia(String contrasenia, String correo) {
-        Optional<Usuario> usuario = usuarioRepo.findByContraseniaAndCorreo(contrasenia,correo);
-        return usuario.isPresent() ? "Contraseña Correcta" : "Contraseña Incorrecta";
+    public Usuario revisarContrasenia(String contrasenia, String correo) {
+        Optional<Usuario> usuario = usuarioRepo.findByContraseniaAndCorreo(contrasenia, correo);
+        return usuario.orElse(null);
     }
 }

@@ -3,6 +3,7 @@ package com.proyecto.web.controladores;
 import com.proyecto.web.dtos.UsuarioAuxDTO;
 import com.proyecto.web.dtos.UsuarioDTO;
 import com.proyecto.web.errores.ResourceNotFound;
+import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.servicios.UsuarioServicio;
 
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,6 @@ public class UsuarioControlador {
 
         boolean haCambiado = false;
 
-        // Compara y actualiza solo los campos que han cambiado
         if (!usuarioExistente.getNombre().equals(usuarioDTO.getNombre())) {
             usuarioExistente.setNombre(usuarioDTO.getNombre());
             haCambiado = true;
@@ -103,13 +103,14 @@ public class UsuarioControlador {
     }
 
     @GetMapping("/checkMail/{correo}")
-    public String revisarCorreo(@PathVariable String correo) {
-        return usuarioServicio.revisarCorreo(correo);
+    public ResponseEntity<Usuario> revisarCorreo(@PathVariable String correo) {
+        Usuario usuario = usuarioServicio.revisarCorreo(correo);
+        return ResponseEntity.ok(usuario);
     }
 
     @GetMapping("/checkPassword/{contrasenia}/{correo}")
-    public String revisarContrasenia(@PathVariable String contrasenia, @PathVariable String correo) {
-
-        return usuarioServicio.revisarContrasenia(contrasenia,correo);
+    public ResponseEntity<Usuario> revisarContrasenia(@PathVariable String contrasenia, @PathVariable String correo) {
+        Usuario usuario = usuarioServicio.revisarContrasenia(contrasenia, correo);
+        return ResponseEntity.ok(usuario);
     }
 }

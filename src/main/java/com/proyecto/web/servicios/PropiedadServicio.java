@@ -93,8 +93,9 @@ public class PropiedadServicio {
         return modelMapper.map(propiedadDTO, Propiedad.class);
     }
 
-    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobado() {
-        return propiedadRepo.findAllPropiedadesNoAprobadas(); 
+    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobadoPorPropietario(Long propietarioId) {
+        return propiedadRepo.findAllPropiedadesNoAprobadasPorPropietario(propietarioId);
     }
+    
     
 }
