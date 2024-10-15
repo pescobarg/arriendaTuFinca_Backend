@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/propiedades")
+@RequestMapping("/api/propiedades")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PropiedadControlador {
 

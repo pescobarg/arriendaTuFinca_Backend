@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/alquileres")
+@RequestMapping("/api/alquileres")
 public class AlquilerControlador {
 
     private final AlquilerServicio alquilerServicio;
