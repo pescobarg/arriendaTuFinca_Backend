@@ -67,7 +67,7 @@ public class UsuarioControlador {
             haCambiado = true;
         }
 
-        if (usuarioExistente.getEdad() == usuarioDTO.getEdad()) {
+        if (usuarioExistente.getEdad() != usuarioDTO.getEdad()) {
             usuarioExistente.setEdad(usuarioDTO.getEdad());
             haCambiado = true;
         }
