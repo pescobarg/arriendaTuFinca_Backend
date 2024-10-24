@@ -45,6 +45,13 @@ public class AlquilerControlador {
         return alquilerServicio.findByPropiedadId(propiedadId);
     }
 
+    @GetMapping("/usuario/{usuarioId}/solicitudes")
+    public ResponseEntity<List<AlquilerDTO>> getSolicitudesPorPropietario(@PathVariable Long usuarioId) {
+        List<AlquilerDTO> solicitudes = alquilerServicio.findAlquileresPorPropietario(usuarioId);
+        return ResponseEntity.ok(solicitudes);
+    }
+
+
     @PostMapping
     public AlquilerDTO crearAlquiler(@RequestBody AlquilerDTO alquilerDTO) {
         return alquilerServicio.save(alquilerDTO);

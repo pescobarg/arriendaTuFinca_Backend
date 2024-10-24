@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/resenias")
 public class ReseniaControlador {
 
@@ -30,9 +31,16 @@ public class ReseniaControlador {
         return ResponseEntity.ok(nuevaResenia);
     }
 
+
     @GetMapping("/usuario")
-    public ResponseEntity<List<ReseniaUsuarioDTO>> obtenerReseniasUsuario() {
-        List<ReseniaUsuarioDTO> resenias = reseniaServicio.obtenerReseniasUsuario();
+    public ResponseEntity<List<ReseniaUsuarioDTO>> obtenerReseniasUsuario(
+        @RequestParam(value = "idUsuario", required = false) Long idUsuario) {
+        List<ReseniaUsuarioDTO> resenias;
+        if (idUsuario != null) {
+            resenias = reseniaServicio.obtenerReseniasPorUsuario(idUsuario);
+        } else {
+            resenias = reseniaServicio.obtenerReseniasUsuario();
+        }
         return ResponseEntity.ok(resenias);
     }
 
@@ -43,13 +51,15 @@ public class ReseniaControlador {
     }
 
     @PutMapping("/usuario/{id}")
-    public ResponseEntity<ReseniaUsuarioDTO> actualizarReseniaUsuario(@PathVariable Long id, @RequestBody ReseniaUsuarioDTO nuevaResenia) {
+    public ResponseEntity<ReseniaUsuarioDTO> actualizarReseniaUsuario(@PathVariable Long id,
+            @RequestBody ReseniaUsuarioDTO nuevaResenia) {
         ReseniaUsuarioDTO reseniaActualizada = reseniaServicio.actualizarReseniaUsuario(id, nuevaResenia);
         return ResponseEntity.ok(reseniaActualizada);
     }
 
     @PutMapping("/propiedad/{id}")
-    public ResponseEntity<ReseniaPropiedadDTO> actualizarReseniaPropiedad(@PathVariable Long id, @RequestBody ReseniaPropiedadDTO nuevaResenia) {
+    public ResponseEntity<ReseniaPropiedadDTO> actualizarReseniaPropiedad(@PathVariable Long id,
+            @RequestBody ReseniaPropiedadDTO nuevaResenia) {
         ReseniaPropiedadDTO reseniaActualizada = reseniaServicio.actualizarReseniaPropiedad(id, nuevaResenia);
         return ResponseEntity.ok(reseniaActualizada);
     }

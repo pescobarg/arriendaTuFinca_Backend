@@ -62,6 +62,18 @@ public class AlquilerServicio {
                 .collect(Collectors.toList());
     }
 
+    public List<AlquilerDTO> findAlquileresPorPropietario(Long propietarioId) {
+        List<Propiedad> propiedadesDelPropietario = propiedadRepo.findByPropietarioId(propietarioId);
+        
+        List<Alquiler> alquileres = alquilerRepo.findByPropiedadIn(propiedadesDelPropietario);
+        
+        return alquileres.stream()
+                .map(alquiler -> modelMapper.map(alquiler, AlquilerDTO.class))
+                .collect(Collectors.toList());
+    }
+    
+
+
     public AlquilerDTO save(AlquilerDTO alquilerDTO) {
         // Obtén el usuario a partir del DTO
         Usuario usuario = usuarioRepo.findById(alquilerDTO.getUsuarioAsignado().getId())

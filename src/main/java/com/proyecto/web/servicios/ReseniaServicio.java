@@ -64,6 +64,13 @@ public class ReseniaServicio {
                 .collect(Collectors.toList());
     }
 
+    public List<ReseniaUsuarioDTO> obtenerReseniasPorUsuario(Long idUsuario) {
+        return reseniaRepo.findByUsuarioCalificadorId_Id(idUsuario).stream()
+            .map(this::convertToUsuarioDto)
+            .collect(Collectors.toList());
+    }
+    
+
     public List<ReseniaPropiedadDTO> obtenerReseniasPropiedad() {
         return reseniaRepo.findAll().stream()
                 .filter(resenia -> resenia.getPropiedadObjetivoId() != null) // Reseñas para propiedades
