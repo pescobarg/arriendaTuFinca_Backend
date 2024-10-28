@@ -2,6 +2,7 @@ package com.proyecto.web.dtos;
 
 import com.proyecto.web.modelos.TipoIngreso;
 import com.proyecto.web.modelos.TipoPropiedad;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,5 @@ public class PropiedadDTO {
     private boolean tienePiscina;
     private boolean tieneAsador;
     private double valorNoche;
+    protected int status;
 }

@@ -1,19 +1,18 @@
 package com.proyecto.web.servicios;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
 import com.proyecto.web.dtos.PropiedadDTO;
 import com.proyecto.web.dtos.UsuarioAuxDTO;
 import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
-
-
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PropiedadServicio {
@@ -60,8 +59,13 @@ public class PropiedadServicio {
         Propiedad savedPropiedad = propiedadRepo.save(propiedad);
         return convertToDto(savedPropiedad); 
     }
-    
 
+    public void eliminarPropiedad(Long id) {
+        Propiedad propiedad = propiedadRepo.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Propiedad no encontrada con ID: " + id));
+        propiedad.setStatus(0); // Realiza el soft-delete cambiando el status a 0
+        propiedadRepo.save(propiedad);
+    }
 
     public List<PropiedadDTO> getPropiedadPorUsuario(Long propietarioId) {
         return propiedadRepo.findByPropietarioId(propietarioId).stream()
@@ -69,8 +73,10 @@ public class PropiedadServicio {
                 .collect(Collectors.toList());
     }
 
-    public void deleteById(Long id) {
-        propiedadRepo.deleteById(id);
+    public List<PropiedadDTO> obtenerPropiedadesSinAlquilerAprobadoPorPropietario(Long propietarioId) {
+        return propiedadRepo.findAllPropiedadesNoAprobadasPorPropietario(propietarioId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     private PropiedadDTO convertToDto(Propiedad propiedad) {
@@ -92,10 +98,5 @@ public class PropiedadServicio {
     private Propiedad convertToEntity(PropiedadDTO propiedadDTO) {
         return modelMapper.map(propiedadDTO, Propiedad.class);
     }
-
-    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobadoPorPropietario(Long propietarioId) {
-        return propiedadRepo.findAllPropiedadesNoAprobadasPorPropietario(propietarioId);
-    }
-    
-    
 }
+

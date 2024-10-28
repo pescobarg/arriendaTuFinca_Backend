@@ -1,15 +1,21 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.dtos.PropiedadDTO;
-import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.modelos.Propiedad;
-import com.proyecto.web.servicios.PropiedadServicio;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.proyecto.web.dtos.PropiedadDTO;
+import com.proyecto.web.errores.ResourceNotFound;
+import com.proyecto.web.servicios.PropiedadServicio;
 
 @RestController
 @RequestMapping("/api/propiedades")
@@ -18,7 +24,7 @@ public class PropiedadControlador {
 
     private final PropiedadServicio propiedadServicio;
 
-    private static final String NOT_FOUND_MESSAGE = "Not found property with id = ";
+    private static final String NOT_FOUND_MESSAGE = "No se encontró la propiedad con id = ";
 
     public PropiedadControlador(PropiedadServicio propiedadServicio) {
         this.propiedadServicio = propiedadServicio;
@@ -51,10 +57,11 @@ public class PropiedadControlador {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePropiedad(@PathVariable Long id) {
+    // Endpoint para realizar soft-delete (desactivar propiedad)
+    @PutMapping("/{id}/desactivar")
+    public ResponseEntity<Void> desactivarPropiedad(@PathVariable Long id) {
         if (propiedadServicio.encontrarPropiedadPorId(id).isPresent()) {
-            propiedadServicio.deleteById(id);
+            propiedadServicio.eliminarPropiedad(id);  // Soft-delete (cambia status a 0)
             return ResponseEntity.noContent().build();
         } else {
             throw new ResourceNotFound(NOT_FOUND_MESSAGE + id);
@@ -67,8 +74,9 @@ public class PropiedadControlador {
     }
 
     @GetMapping("/usuario/{propietarioId}/sin-alquiler-aprobado")
-    public List<Propiedad> obtenerPropiedadesSinAlquilerAprobado(@PathVariable Long propietarioId) {
+    public List<PropiedadDTO> obtenerPropiedadesSinAlquilerAprobado(@PathVariable Long propietarioId) {
         return propiedadServicio.obtenerPropiedadesSinAlquilerAprobadoPorPropietario(propietarioId);
     }
-    
 }
+
+

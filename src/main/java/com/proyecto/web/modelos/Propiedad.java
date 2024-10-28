@@ -1,6 +1,17 @@
 package com.proyecto.web.modelos;
 
-import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +22,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE propiedad SET status = 0 WHERE id = ?")
+@Where(clause = "status = 1") // Solo muestra las propiedades activa
 public class Propiedad {
 
     @Id
@@ -61,4 +74,8 @@ public class Propiedad {
 
     @Column(nullable = false)
     private double valorNoche;
+
+    @Column(nullable = false)
+    protected int status = 1;
+
 }
