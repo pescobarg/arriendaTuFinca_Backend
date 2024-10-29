@@ -14,7 +14,6 @@ import com.proyecto.web.modelos.Propiedad;
 public interface PropiedadRepositorio extends JpaRepository<Propiedad, Long> {
     List<Propiedad> findByPropietarioId(Long propietarioId);
     
-    @Query("SELECT p FROM Propiedad p WHERE p.status = 1 AND p.propietario.id = :propietarioId AND p.id NOT IN (SELECT a.propiedad.id FROM Alquiler a WHERE a.estado = 'APROBADO')")
+    @Query("SELECT p FROM Propiedad p WHERE  p.disponible = true  AND p.status = 1 AND p.propietario.id != :propietarioId AND p.id NOT IN (SELECT a.propiedad.id FROM Alquiler a WHERE a.estado = 'APROBADO')")
     List<Propiedad> findAllPropiedadesNoAprobadasPorPropietario(@Param("propietarioId") Long propietarioId);
-
 }

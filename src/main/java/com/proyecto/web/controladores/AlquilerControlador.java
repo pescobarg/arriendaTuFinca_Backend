@@ -2,6 +2,7 @@ package com.proyecto.web.controladores;
 
 import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.errores.ResourceNotFound;
+import com.proyecto.web.modelos.Alquiler;
 import com.proyecto.web.servicios.AlquilerServicio;
 
 import org.springframework.http.ResponseEntity;
@@ -58,14 +59,45 @@ public class AlquilerControlador {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlquilerDTO> actualizarAlquiler(@PathVariable Long id, @RequestBody AlquilerDTO alquilerDTO) {
-        if (alquilerServicio.findById(id).isPresent()) {
-            alquilerDTO.setId(id);
-            return ResponseEntity.ok(alquilerServicio.save(alquilerDTO));
-        } else {
-            throw new ResourceNotFound(NOT_FOUND_MESSAGE + id);
-        }
+public ResponseEntity<AlquilerDTO> actualizarAlquiler(@PathVariable Long id, @RequestBody AlquilerDTO alquilerDTO) {
+    // Buscar el alquiler usando su DTO
+    AlquilerDTO alquilerExistente = alquilerServicio.findById(id)
+        .orElseThrow(() -> new ResourceNotFound("Not found Alquiler with id = " + id));
+
+    boolean haCambiado = false;
+
+    // Compara y actualiza los campos si han cambiado
+    if (!alquilerExistente.getEstado().equals(alquilerDTO.getEstado())) {
+        alquilerExistente.setEstado(alquilerDTO.getEstado());
+        haCambiado = true;
     }
+
+    if (!alquilerExistente.getFechaInicio().equals(alquilerDTO.getFechaInicio())) {
+        alquilerExistente.setFechaInicio(alquilerDTO.getFechaInicio());
+        haCambiado = true;
+    }
+
+    if (!alquilerExistente.getFechaFin().equals(alquilerDTO.getFechaFin())) {
+        alquilerExistente.setFechaFin(alquilerDTO.getFechaFin());
+        haCambiado = true;
+    }
+
+    if ((alquilerExistente.getComentarios() == null && alquilerDTO.getComentarios() != null) ||
+        (alquilerExistente.getComentarios() != null && !alquilerExistente.getComentarios().equals(alquilerDTO.getComentarios()))) {
+        alquilerExistente.setComentarios(alquilerDTO.getComentarios());
+        haCambiado = true;
+    }
+
+    // Guardar solo si ha habido cambios
+    if (haCambiado) {
+        alquilerServicio.update(alquilerExistente);
+    }
+
+    // Retornar el alquiler actualizado
+    return ResponseEntity.ok(alquilerExistente);
+}
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAlquiler(@PathVariable Long id) {

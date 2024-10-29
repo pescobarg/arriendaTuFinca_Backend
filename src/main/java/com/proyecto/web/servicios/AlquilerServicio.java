@@ -2,6 +2,7 @@ package com.proyecto.web.servicios;
 
 import com.proyecto.web.dtos.AlquilerDTO;
 import com.proyecto.web.modelos.Alquiler;
+import com.proyecto.web.modelos.EstadoAlquiler;
 import com.proyecto.web.modelos.Propiedad;
 import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.repositorios.AlquilerRepositorio;
@@ -89,9 +90,9 @@ public class AlquilerServicio {
                 .orElseThrow(() -> new IllegalArgumentException("La propiedad no existe: " + alquilerDTO.getPropiedad().getId()));
 
         // Verificar si la propiedad está disponible
-        if (!propiedad.isDisponible()) {
+        /*if (!propiedad.isDisponible()) {
             throw new IllegalArgumentException("La propiedad no está disponible para alquiler: " + propiedad.getId());
-        }
+        }*/
 
         propiedad.setDisponible(false);
         propiedadRepo.save(propiedad); // Guarda la propiedad actualizada
@@ -114,6 +115,46 @@ public class AlquilerServicio {
         Alquiler savedAlquiler = alquilerRepo.save(alquiler);
         return modelMapper.map(savedAlquiler, AlquilerDTO.class);
     }
+
+    public AlquilerDTO update(AlquilerDTO alquilerDTO) {
+    // Buscar el alquiler existente en la base de datos
+    Alquiler alquilerExistente = alquilerRepo.findById(alquilerDTO.getId())
+            .orElseThrow(() -> new IllegalArgumentException("El alquiler con ID " + alquilerDTO.getId() + " no existe."));
+
+    // Obtener y verificar el usuario a partir del DTO
+    Usuario usuario = usuarioRepo.findById(alquilerDTO.getUsuarioAsignado().getId())
+            .orElseThrow(() -> new IllegalArgumentException("El ID del usuario no existe: " + alquilerDTO.getUsuarioAsignado().getId()));
+
+    // Obtener y verificar la propiedad
+    Propiedad propiedad = propiedadRepo.findById(alquilerDTO.getPropiedad().getId())
+            .orElseThrow(() -> new IllegalArgumentException("La propiedad no existe: " + alquilerDTO.getPropiedad().getId()));
+
+    // Verificar disponibilidad de la propiedad si está cambiando a un nuevo alquiler
+    if (!alquilerExistente.getPropiedad().equals(propiedad) && !propiedad.isDisponible()) {
+        throw new IllegalArgumentException("La propiedad no está disponible para alquiler: " + propiedad.getId());
+    }
+
+    // Actualizar el estado de la propiedad si es necesario
+    if (alquilerDTO.getEstado() == EstadoAlquiler.FINALIZADO) {
+        propiedad.setDisponible(true); // Finalizar el alquiler y liberar la propiedad
+    } else {
+        propiedad.setDisponible(false); // La propiedad se alquila y queda no disponible
+    }
+    propiedadRepo.save(propiedad);
+
+    // Actualizar solo los campos necesarios en el alquiler existente
+    alquilerExistente.setUsuarioAsignado(usuario);
+    alquilerExistente.setPropiedad(propiedad);
+    alquilerExistente.setFechaInicio(alquilerDTO.getFechaInicio());
+    alquilerExistente.setFechaFin(alquilerDTO.getFechaFin());
+    alquilerExistente.setEstado(alquilerDTO.getEstado());
+    alquilerExistente.setComentarios(alquilerDTO.getComentarios());
+
+    // Guardar y mapear a DTO
+    Alquiler actualizado = alquilerRepo.save(alquilerExistente);
+    return modelMapper.map(actualizado, AlquilerDTO.class);
+}
+
 
     public void deleteById(Long id) {
         alquilerRepo.deleteById(id);
