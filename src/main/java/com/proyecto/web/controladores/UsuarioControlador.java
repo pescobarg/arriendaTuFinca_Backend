@@ -6,6 +6,7 @@ import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.servicios.UsuarioServicio;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "http://127.0.0.1")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioControlador {
 
     private final UsuarioServicio usuarioServicio;
@@ -102,15 +103,24 @@ public class UsuarioControlador {
         return usuarioAuxDTO;
     }
 
-    @GetMapping("/checkMail/{correo}")
-    public ResponseEntity<Usuario> revisarCorreo(@PathVariable String correo) {
-        Usuario usuario = usuarioServicio.revisarCorreo(correo);
-        return ResponseEntity.ok(usuario);
+    private UsuarioAuxDTO convertirAUsuarioAuxDTO(Usuario usuario) {
+        UsuarioAuxDTO usuarioAuxDTO = new UsuarioAuxDTO();
+        usuarioAuxDTO.setId(usuario.getId());
+        usuarioAuxDTO.setNombre(usuario.getNombre());
+        usuarioAuxDTO.setApellido(usuario.getApellido());
+        usuarioAuxDTO.setCorreo(usuario.getCorreo());
+        usuarioAuxDTO.setEdad(usuario.getEdad());
+        return usuarioAuxDTO;
     }
 
-    @GetMapping("/checkPassword/{contrasenia}/{correo}")
-    public ResponseEntity<Usuario> revisarContrasenia(@PathVariable String contrasenia, @PathVariable String correo) {
-        Usuario usuario = usuarioServicio.revisarContrasenia(contrasenia, correo);
-        return ResponseEntity.ok(usuario);
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioAuxDTO> authenticate(@RequestBody UsuarioDTO loginRequest) {
+        Optional<Usuario> usuarioOpt = usuarioServicio.authenticate(loginRequest.getCorreo(), loginRequest.getContrasenia());
+        if (usuarioOpt.isPresent()) {
+            return ResponseEntity.ok(convertirAUsuarioAuxDTO(usuarioOpt.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
+
 }
