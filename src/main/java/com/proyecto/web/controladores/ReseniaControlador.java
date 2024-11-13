@@ -19,19 +19,6 @@ public class ReseniaControlador {
         this.reseniaServicio = reseniaServicio;
     }
 
-    @PostMapping("/usuario")
-    public ResponseEntity<ReseniaUsuarioDTO> agregarReseniaUsuario(@RequestBody ReseniaUsuarioDTO reseniaDTO) {
-        ReseniaUsuarioDTO nuevaResenia = reseniaServicio.agregarReseniaUsuario(reseniaDTO);
-        return ResponseEntity.ok(nuevaResenia);
-    }
-
-    @PostMapping("/propiedad")
-    public ResponseEntity<ReseniaPropiedadDTO> agregarReseniaPropiedad(@RequestBody ReseniaPropiedadDTO reseniaDTO) {
-        ReseniaPropiedadDTO nuevaResenia = reseniaServicio.agregarReseniaPropiedad(reseniaDTO);
-        return ResponseEntity.ok(nuevaResenia);
-    }
-
-
     @GetMapping("/usuario")
     public ResponseEntity<List<ReseniaUsuarioDTO>> obtenerReseniasUsuario(
         @RequestParam(value = "idUsuario", required = false) Long idUsuario) {
@@ -45,9 +32,31 @@ public class ReseniaControlador {
     }
 
     @GetMapping("/propiedad")
-    public ResponseEntity<List<ReseniaPropiedadDTO>> obtenerReseniasPropiedad() {
-        List<ReseniaPropiedadDTO> resenias = reseniaServicio.obtenerReseniasPropiedad();
-        return ResponseEntity.ok(resenias);
+public ResponseEntity<List<ReseniaPropiedadDTO>> obtenerReseniasPropiedad(
+    @RequestParam(value = "idPropiedad", required = false) Long idPropiedad) {
+    
+    List<ReseniaPropiedadDTO> resenias;
+    if (idPropiedad != null) {
+        resenias = reseniaServicio.obtenerReseniasPorPropiedad(idPropiedad);
+    } else {
+        // Si no se proporciona idPropiedad, obtener todas las reseñas de propiedades
+        resenias = reseniaServicio.obtenerReseniasPropiedad();
+    }
+    return ResponseEntity.ok(resenias);
+}
+
+
+
+    @PostMapping("/usuario")
+    public ResponseEntity<ReseniaUsuarioDTO> agregarReseniaUsuario(@RequestBody ReseniaUsuarioDTO reseniaDTO) {
+        ReseniaUsuarioDTO nuevaResenia = reseniaServicio.agregarReseniaUsuario(reseniaDTO);
+        return ResponseEntity.ok(nuevaResenia);
+    }
+
+    @PostMapping("/propiedad")
+    public ResponseEntity<ReseniaPropiedadDTO> agregarReseniaPropiedad(@RequestBody ReseniaPropiedadDTO reseniaDTO) {
+        ReseniaPropiedadDTO nuevaResenia = reseniaServicio.agregarReseniaPropiedad(reseniaDTO);
+        return ResponseEntity.ok(nuevaResenia);
     }
 
     @PutMapping("/usuario/{id}")

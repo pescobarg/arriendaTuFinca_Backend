@@ -78,6 +78,15 @@ public class ReseniaServicio {
                 .collect(Collectors.toList());
     }
 
+    public List<ReseniaPropiedadDTO> obtenerReseniasPorPropiedad(Long idPropiedad) {
+        List<Resenia> resenias = reseniaRepo.findByPropiedadObjetivoId_Id(idPropiedad);
+    
+        return resenias.stream()
+            .map(resenia -> modelMapper.map(resenia, ReseniaPropiedadDTO.class))
+            .collect(Collectors.toList());
+    }
+    
+
     public ReseniaUsuarioDTO actualizarReseniaUsuario(Long id, ReseniaUsuarioDTO nuevaResenia) {
         Resenia resenia = reseniaRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFound("Reseña de usuario no encontrada con id = " + id));
