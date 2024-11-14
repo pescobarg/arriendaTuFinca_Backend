@@ -1,4 +1,7 @@
-package com.proyecto.web.dtos;
+package com.proyecto.web.dtos.Resenia;
+
+import com.proyecto.web.dtos.Propiedad.PropiedadDTO;
+import com.proyecto.web.dtos.Usuario.UsuarioAuxDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

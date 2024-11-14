@@ -1,4 +1,4 @@
-package com.proyecto.web.dtos;
+package com.proyecto.web.dtos.Usuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioAuxDTO {
-    private Long id;
-    private String nombre;
-    private String apellido;
+public class LoginDTO {
     private String correo;
-    private int edad;
+    private String contrasenia;
 }

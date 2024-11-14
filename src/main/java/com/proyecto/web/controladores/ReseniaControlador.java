@@ -1,7 +1,7 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.dtos.ReseniaPropiedadDTO;
-import com.proyecto.web.dtos.ReseniaUsuarioDTO;
+import com.proyecto.web.dtos.Resenia.ReseniaPropiedadDTO;
+import com.proyecto.web.dtos.Resenia.ReseniaUsuarioDTO;
 import com.proyecto.web.servicios.ReseniaServicio;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://127.0.0.1")
 @RequestMapping("/api/resenias")
 public class ReseniaControlador {
 

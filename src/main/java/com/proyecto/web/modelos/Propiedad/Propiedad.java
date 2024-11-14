@@ -1,7 +1,9 @@
-package com.proyecto.web.modelos;
+package com.proyecto.web.modelos.Propiedad;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import com.proyecto.web.modelos.Usuario.Usuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,8 +1,8 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.dtos.AlquilerDTO;
+import com.proyecto.web.dtos.Alquiler.AlquilerDTO;
 import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.modelos.Alquiler;
+import com.proyecto.web.modelos.Alquiler.Alquiler;
 import com.proyecto.web.servicios.AlquilerServicio;
 
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://127.0.0.1")
 @RestController
 @RequestMapping("/api/alquileres")
 public class AlquilerControlador {

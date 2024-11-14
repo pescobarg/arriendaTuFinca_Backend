@@ -1,9 +1,9 @@
 package com.proyecto.web.servicios;
 
-import com.proyecto.web.dtos.ReseniaPropiedadDTO;
-import com.proyecto.web.dtos.ReseniaUsuarioDTO;
+import com.proyecto.web.dtos.Resenia.ReseniaPropiedadDTO;
+import com.proyecto.web.dtos.Resenia.ReseniaUsuarioDTO;
 import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.modelos.Resenia;
+import com.proyecto.web.modelos.Resenia.Resenia;
 import com.proyecto.web.repositorios.ReseniaRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
 import com.proyecto.web.repositorios.PropiedadRepositorio;

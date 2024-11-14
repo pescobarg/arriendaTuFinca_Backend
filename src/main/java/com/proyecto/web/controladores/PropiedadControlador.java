@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.proyecto.web.dtos.PropiedadDTO;
+import com.proyecto.web.dtos.Propiedad.PropiedadDTO;
 import com.proyecto.web.errores.ResourceNotFound;
 import com.proyecto.web.servicios.PropiedadServicio;
 
 @RestController
 @RequestMapping("/api/propiedades")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://127.0.0.1")
 public class PropiedadControlador {
 
     private final PropiedadServicio propiedadServicio;

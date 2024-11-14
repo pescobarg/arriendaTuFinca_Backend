@@ -1,12 +1,15 @@
-package com.proyecto.web.dtos;
+package com.proyecto.web.dtos.Alquiler;
 
-import com.proyecto.web.modelos.EstadoAlquiler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
+import com.proyecto.web.dtos.Propiedad.PropiedadDTO;
+import com.proyecto.web.dtos.Usuario.UsuarioAuxDTO;
+import com.proyecto.web.modelos.Alquiler.EstadoAlquiler;
 
 @Getter
 @Setter

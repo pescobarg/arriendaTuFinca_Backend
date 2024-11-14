@@ -1,10 +1,10 @@
 package com.proyecto.web.servicios;
 
-import com.proyecto.web.dtos.AlquilerDTO;
-import com.proyecto.web.modelos.Alquiler;
-import com.proyecto.web.modelos.EstadoAlquiler;
-import com.proyecto.web.modelos.Propiedad;
-import com.proyecto.web.modelos.Usuario;
+import com.proyecto.web.dtos.Alquiler.AlquilerDTO;
+import com.proyecto.web.modelos.Alquiler.Alquiler;
+import com.proyecto.web.modelos.Alquiler.EstadoAlquiler;
+import com.proyecto.web.modelos.Propiedad.Propiedad;
+import com.proyecto.web.modelos.Usuario.Usuario;
 import com.proyecto.web.repositorios.AlquilerRepositorio;
 import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;

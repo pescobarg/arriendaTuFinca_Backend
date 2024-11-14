@@ -1,4 +1,4 @@
-package com.proyecto.web.modelos;
+package com.proyecto.web.modelos.Alquiler;
 
 public enum EstadoAlquiler {
     PENDIENTE,

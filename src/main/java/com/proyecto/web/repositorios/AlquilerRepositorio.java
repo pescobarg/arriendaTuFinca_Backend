@@ -1,7 +1,7 @@
 package com.proyecto.web.repositorios;
 
-import com.proyecto.web.modelos.Alquiler;
-import com.proyecto.web.modelos.Propiedad;
+import com.proyecto.web.modelos.Alquiler.Alquiler;
+import com.proyecto.web.modelos.Propiedad.Propiedad;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

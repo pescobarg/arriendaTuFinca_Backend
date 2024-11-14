@@ -1,4 +1,4 @@
-package com.proyecto.web.modelos;
+package com.proyecto.web.modelos.Alquiler;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
+import com.proyecto.web.modelos.Propiedad.Propiedad;
+import com.proyecto.web.modelos.Usuario.Usuario;
 
 @Entity
 @AllArgsConstructor
