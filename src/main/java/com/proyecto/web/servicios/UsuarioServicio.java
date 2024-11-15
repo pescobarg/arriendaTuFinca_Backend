@@ -38,7 +38,14 @@ public class UsuarioServicio {
 
     private static final String EDAD_INVALIDA = "La edad no puede ser menor a 18";
 
-    public UsuarioServicio(UsuarioRepositorio usuarioRepo, PropiedadRepositorio propiedadRepo, AlquilerRepositorio alquilerRepo, ModelMapper modelMapper, AuthenticationManager authenticationManager, JWTUtil jwtUtil, CustomUserDetailService customUserDetailService) {
+    public UsuarioServicio(UsuarioRepositorio usuarioRepo, 
+                            PropiedadRepositorio propiedadRepo, 
+                            AlquilerRepositorio alquilerRepo, 
+                            ModelMapper modelMapper, 
+                            AuthenticationManager authenticationManager, 
+                            JWTUtil jwtUtil, 
+                            CustomUserDetailService customUserDetailService
+                            ) {
         this.usuarioRepo = usuarioRepo;
         this.propiedadRepo = propiedadRepo;
         this.alquilerRepo = alquilerRepo;
@@ -79,15 +86,9 @@ public class UsuarioServicio {
         usuarioRepo.deleteById(id);
     }
 
-    private UsuarioDTO convertToDto(Usuario usuario) {
-        return modelMapper.map(usuario, UsuarioDTO.class);
-    }
+    public String login(String correo, String contrasenia) {
 
-    private Usuario convertToEntity(UsuarioDTO usuarioDTO) {
-        return modelMapper.map(usuarioDTO, Usuario.class);
-    }
-    
-    public String authenticate(String correo, String contrasenia) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(correo, contrasenia)
         );
@@ -96,17 +97,60 @@ public class UsuarioServicio {
 
             return jwtUtil.generateToken(
                     customUserDetailService.getUserDetail().getId(),
-                    customUserDetailService.getUserDetail().getCorreo(),
-                    customUserDetailService.getUserDetail().getContrasenia()
+                    customUserDetailService.getUserDetail().getCorreo()
             );
         }
-    
         throw new BadCredentialsException("Credenciales invalidas");  
     }
+
+
+    public UsuarioDTO autorizacion(Authentication authentication) throws Exception {
+        System.out.println("-------COMPROBANDO AUTORIZACION----------------");
+        System.out.println(authentication.getName());
+    
+        // Buscar el usuario en la base de datos
+        Optional<Usuario> optionalUsuario = usuarioRepo.findByCorreo(authentication.getName());
+    
+        if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
+    
+            // Convertir el usuario en un DTO
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setApellido(usuario.getApellido());
+            usuarioDTO.setCorreo(usuario.getCorreo());
+            usuarioDTO.setEdad(usuario.getEdad());
+            usuarioDTO.setId(usuario.getId());
+    
+            System.out.println("--------------------USUARIO OBTENIDO------------------------"); 
+            System.out.println("NOMBRE " + usuarioDTO.getNombre());
+            System.out.println("APELLIDO " + usuarioDTO.getApellido()); 
+            System.out.println("CORREO " + usuarioDTO.getCorreo()); 
+            System.out.println("EDAD " + usuarioDTO.getEdad()); 
+            System.out.println("ID " + usuarioDTO.getId()); 
+            System.out.println("-----------------------------------------------"); 
+    
+            return usuarioDTO;
+        } else {
+            System.out.println("Usuario no encontrado.");
+            return null; 
+            
+        }
+    }
+    
     
 
-   
 
+
+
+    private UsuarioDTO convertToDto(Usuario usuario) {
+        return modelMapper.map(usuario, UsuarioDTO.class);
+    }
+
+    private Usuario convertToEntity(UsuarioDTO usuarioDTO) {
+        return modelMapper.map(usuarioDTO, Usuario.class);
+    }
+    
     public UsuarioAuxDTO convertirAUsuarioAuxDTO(UsuarioDTO usuarioDTO) {
         UsuarioAuxDTO usuarioAuxDTO = new UsuarioAuxDTO();
         usuarioAuxDTO.setId(usuarioDTO.getId());

@@ -34,6 +34,4 @@ public class CustomUserDetailService implements UserDetailsService {
         userDetail = user.get();
         return new org.springframework.security.core.userdetails.User(userDetail.getCorreo(), userDetail.getContrasenia(),  Collections.emptyList()  );
     }
-
-    
 }

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.proyecto.web.seguridad.CustomUserDetailService;
 
+import io.jsonwebtoken.Claims;
+
 import java.io.IOException;
 
 @Component
@@ -23,6 +25,8 @@ public class JWTFilter extends OncePerRequestFilter {
     private final CustomUserDetailService customUserDetailsService;
 
     private String username = null;
+    private Claims claims = null;
+
 
     JWTFilter(JWTUtil jwtUtil, CustomUserDetailService customUserDetailsService) {
         this.jwtUtil = jwtUtil;
@@ -41,6 +45,7 @@ public class JWTFilter extends OncePerRequestFilter {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 token = authorizationHeader.substring(7);
                 username = jwtUtil.extractUsername(token);
+                claims = jwtUtil.extractAllClaims(token);
             }
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -59,6 +64,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
     public String getCurrentUser() {
         return username;
+    }
+
+    public Long getAuthId() {
+        return  (Long) claims.get("id");
     }
 
 }
