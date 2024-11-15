@@ -12,5 +12,6 @@ import java.util.List;
 public interface ReseniaRepositorio extends JpaRepository<Resenia, Long> {
 
     List<Resenia> findByUsuarioCalificadorId_Id(Long idUsuario);
+    List<Resenia> findByPropiedadObjetivoId_Id(Long propiedadId);
 
 }

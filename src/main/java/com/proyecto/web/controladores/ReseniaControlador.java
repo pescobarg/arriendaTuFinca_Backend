@@ -64,16 +64,26 @@ public class ReseniaControlador {
     }
 
     @GetMapping("/propiedad")
-    public ResponseEntity<List<ReseniaPropiedadDTO>> obtenerReseniasPropiedad(Authentication authentication) {
-        
-        if (authentication == null || !authentication.isAuthenticated()) {
-            // Retorna una respuesta de error si el usuario no está autenticado
-            return ResponseEntity.status(401).build(); // 401 Unauthorized
-        }
+    public ResponseEntity<List<ReseniaPropiedadDTO>> obtenerReseniasPropiedad(
+        @RequestParam(value = "idPropiedad", required = false) Long idPropiedad, Authentication authentication) {
+            
+            if (authentication == null || !authentication.isAuthenticated()) {
+                // Retorna una respuesta de error si el usuario no está autenticado
+                return ResponseEntity.status(401).build(); // 401 Unauthorized
+            }
 
-        List<ReseniaPropiedadDTO> resenias = reseniaServicio.obtenerReseniasPropiedad();
+        
+        List<ReseniaPropiedadDTO> resenias;
+        if (idPropiedad != null) {
+            resenias = reseniaServicio.obtenerReseniasPorPropiedad(idPropiedad);
+        } else {
+            // Si no se proporciona idPropiedad, obtener todas las reseñas de propiedades
+            resenias = reseniaServicio.obtenerReseniasPropiedad();
+        }
         return ResponseEntity.ok(resenias);
     }
+
+    
 
     @PutMapping("/usuario/{id}")
     public ResponseEntity<ReseniaUsuarioDTO> actualizarReseniaUsuario(@PathVariable Long id,
