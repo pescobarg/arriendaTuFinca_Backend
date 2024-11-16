@@ -1,4 +1,7 @@
-package com.proyecto.web.modelos;
+package com.proyecto.web.modelos.Resenia;
+
+import com.proyecto.web.modelos.Propiedad.Propiedad;
+import com.proyecto.web.modelos.Usuario.Usuario;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -18,11 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.proyecto.web.dtos.AlquilerDTO;
-import com.proyecto.web.dtos.PropiedadDTO;
-import com.proyecto.web.dtos.UsuarioAuxDTO;
+import com.proyecto.web.dtos.Alquiler.AlquilerDTO;
+import com.proyecto.web.dtos.Propiedad.PropiedadDTO;
+import com.proyecto.web.dtos.Usuario.UsuarioAuxDTO;
 import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.modelos.EstadoAlquiler;
+import com.proyecto.web.modelos.Alquiler.EstadoAlquiler;
 import com.proyecto.web.servicios.AlquilerServicio;
 
 @WebMvcTest(AlquilerControlador.class)

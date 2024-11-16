@@ -1,7 +1,8 @@
-package com.proyecto.web.dtos;
+package com.proyecto.web.dtos.Propiedad;
 
-import com.proyecto.web.modelos.TipoIngreso;
-import com.proyecto.web.modelos.TipoPropiedad;
+import com.proyecto.web.dtos.Usuario.UsuarioAuxDTO;
+import com.proyecto.web.modelos.Propiedad.TipoIngreso;
+import com.proyecto.web.modelos.Propiedad.TipoPropiedad;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

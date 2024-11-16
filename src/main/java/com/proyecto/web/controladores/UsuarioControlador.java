@@ -1,12 +1,12 @@
 package com.proyecto.web.controladores;
 
-import com.proyecto.web.dtos.UsuarioAuxDTO;
-import com.proyecto.web.dtos.UsuarioDTO;
+import com.proyecto.web.dtos.Usuario.UsuarioAuxDTO;
+import com.proyecto.web.dtos.Usuario.UsuarioDTO;
 import com.proyecto.web.errores.ResourceNotFound;
-import com.proyecto.web.modelos.Usuario;
 import com.proyecto.web.servicios.UsuarioServicio;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,30 +25,77 @@ public class UsuarioControlador {
     }
 
     @GetMapping
-    public List<UsuarioAuxDTO> getUsuarios() {
-        return usuarioServicio.findAll().stream()
-            .map(this::convertirAUsuarioAuxDTO)
+    public ResponseEntity<List<UsuarioAuxDTO>> getUsuarios(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // Retorna una respuesta de error si el usuario no está autenticado
+            return ResponseEntity.status(401).build(); // 401 Unauthorized
+        }
+
+        // Opcional: Imprime el nombre del usuario autenticado
+        System.out.println("Usuario autenticado: " + authentication.getName());
+
+        // Continúa con la lógica actual si está autenticado
+        List<UsuarioAuxDTO> usuarios = usuarioServicio.findAll().stream()
+            .map(usuarioServicio::convertirAUsuarioAuxDTO)
             .collect(Collectors.toList());
+
+        return ResponseEntity.ok(usuarios);
+    }    
+
+
+    @GetMapping("/usuarioActual")
+    public ResponseEntity<UsuarioAuxDTO> getUsuarioActualPorId(Authentication authentication) throws Exception {
+        // Llamamos al servicio de autenticación para validar el usuario
+        UsuarioDTO usuarioAutenticado = usuarioServicio.autorizacion(authentication);
+    
+        if (usuarioAutenticado == null) {
+            // Si el usuario no está autenticado, retornamos un error 401 Unauthorized
+            return ResponseEntity.status(401).build();
+        }
+
+        System.out.println("Usuario autenticado: " + authentication.getName());
+
+        // Si el usuario está autenticado, buscamos el usuario por ID
+        Optional<UsuarioDTO> usuarioDTO = Optional.ofNullable(
+                usuarioServicio.findById(usuarioAutenticado.getId()).orElseThrow(() -> new ResourceNotFound("No hay un usuario con id = " + usuarioAutenticado.getId()))
+        );
+    
+        // Convertimos y retornamos el usuario encontrado
+        return usuarioDTO.map(dto -> ResponseEntity.ok(usuarioServicio.convertirAUsuarioAuxDTO(dto)))
+                         .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioAuxDTO> getUsuarioPorId(@PathVariable Long id) {
-        Optional<UsuarioDTO> usuarioDTO = Optional.ofNullable(usuarioServicio.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Not found User with id = " + id)));
-        return usuarioDTO.map(dto -> ResponseEntity.ok(convertirAUsuarioAuxDTO(dto)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UsuarioAuxDTO> getUsuarioPorId(Authentication authentication , Long id) throws Exception {
+        
+        // Llamamos al servicio de autenticación para validar el usuario
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // Retorna una respuesta de error si el usuario no está autenticado
+            return ResponseEntity.status(401).build(); // 401 Unauthorized
+        }
+        // Si el usuario está autenticado, buscamos el usuario por ID
+        Optional<UsuarioDTO> usuarioDTO = Optional.ofNullable(
+                usuarioServicio.findById(id).orElseThrow(() -> new ResourceNotFound("No hay un usuario con id = " + id))
+        );
+    
+        // Convertimos y retornamos el usuario encontrado
+        return usuarioDTO.map(dto -> ResponseEntity.ok(usuarioServicio.convertirAUsuarioAuxDTO(dto)))
+                         .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioAuxDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        UsuarioDTO usuarioCreado = usuarioServicio.save(usuarioDTO);
-        return ResponseEntity.ok(convertirAUsuarioAuxDTO(usuarioCreado));
-    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioAuxDTO> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO) {
-        UsuarioDTO usuarioExistente = usuarioServicio.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Not found User with id = " + id));
+    @PutMapping("/id")
+    public ResponseEntity<UsuarioAuxDTO> actualizarUsuarioActual(Authentication authentication, @RequestBody UsuarioDTO usuarioDTO) throws Exception {
+        
+        UsuarioDTO usuarioAutenticado = usuarioServicio.autorizacion(authentication);
+    
+        if (usuarioAutenticado == null) {
+            // Si el usuario no está autenticado, retornamos un error 401 Unauthorized
+            return ResponseEntity.status(401).build();
+        }
+        
+        UsuarioDTO usuarioExistente = usuarioServicio.findById(usuarioAutenticado.getId())
+                .orElseThrow(() -> new ResourceNotFound("No hay un usuario con id = " + usuarioAutenticado.getId()));
 
         boolean haCambiado = false;
 
@@ -72,45 +119,29 @@ public class UsuarioControlador {
             haCambiado = true;
         }
 
-        // Guardar cambios solo si ha habido cambios
         if (haCambiado) {
             usuarioServicio.save(usuarioExistente);
         }
 
-        // Convertir a DTO auxiliar para la respuesta
-        return ResponseEntity.ok(convertirAUsuarioAuxDTO(usuarioExistente));
+        return ResponseEntity.ok(usuarioServicio.convertirAUsuarioAuxDTO(usuarioExistente));
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarUsuario(Authentication authentication, @PathVariable Long id) {
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // Retorna una respuesta de error si el usuario no está autenticado
+            return ResponseEntity.status(401).build(); // 401 Unauthorized
+        }
+        
         if (usuarioServicio.findById(id).isPresent()) {
             usuarioServicio.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {
-            throw new ResourceNotFound("Not found User with id = " + id);
+            throw new ResourceNotFound("No hay un usuario con id = " + id);
         }
     }
 
-    private UsuarioAuxDTO convertirAUsuarioAuxDTO(UsuarioDTO usuarioDTO) {
-        UsuarioAuxDTO usuarioAuxDTO = new UsuarioAuxDTO();
-        usuarioAuxDTO.setId(usuarioDTO.getId());
-        usuarioAuxDTO.setNombre(usuarioDTO.getNombre());
-        usuarioAuxDTO.setApellido(usuarioDTO.getApellido());
-        usuarioAuxDTO.setCorreo(usuarioDTO.getCorreo());
-        usuarioAuxDTO.setEdad(usuarioDTO.getEdad());
-        return usuarioAuxDTO;
-    }
 
-    @GetMapping("/checkMail/{correo}")
-    public ResponseEntity<Usuario> revisarCorreo(@PathVariable String correo) {
-        Usuario usuario = usuarioServicio.revisarCorreo(correo);
-        return ResponseEntity.ok(usuario);
-    }
-
-    @GetMapping("/checkPassword/{contrasenia}/{correo}")
-    public ResponseEntity<Usuario> revisarContrasenia(@PathVariable String contrasenia, @PathVariable String correo) {
-        Usuario usuario = usuarioServicio.revisarContrasenia(contrasenia, correo);
-        return ResponseEntity.ok(usuario);
-    }
 }

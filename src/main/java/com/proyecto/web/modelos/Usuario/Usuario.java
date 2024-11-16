@@ -1,4 +1,4 @@
-package com.proyecto.web.modelos;
+package com.proyecto.web.modelos.Usuario;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

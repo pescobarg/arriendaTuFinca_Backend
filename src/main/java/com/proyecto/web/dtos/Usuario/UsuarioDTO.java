@@ -1,4 +1,4 @@
-package com.proyecto.web.dtos;
+package com.proyecto.web.dtos.Usuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
