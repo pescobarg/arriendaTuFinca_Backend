@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://127.0.0.1")
 public class AutenticacionControlador {
 
     private final UsuarioServicio usuarioServicio;

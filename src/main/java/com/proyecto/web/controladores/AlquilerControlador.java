@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://127.0.0.1")
 @RestController
 @RequestMapping("/api/alquileres")
 public class AlquilerControlador {
@@ -133,48 +133,24 @@ public class AlquilerControlador {
     
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlquilerDTO> actualizarAlquiler(Authentication authentication, @PathVariable Long id, @RequestBody AlquilerDTO alquilerDTO) {
-        
+    public ResponseEntity<AlquilerDTO> actualizarAlquiler(Authentication authentication, 
+                                                          @PathVariable Long id, 
+                                                          @RequestBody AlquilerDTO alquilerDTO) {
         if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build(); // 401 Unauthorized
+            return ResponseEntity.status(401).build(); // No autenticado
         }
-        // Buscar el alquiler usando su DTO
-        AlquilerDTO alquilerExistente = alquilerServicio.findById(id)
-            .orElseThrow(() -> new ResourceNotFound("Not found Alquiler with id = " + id));
-
-        boolean haCambiado = false;
-
-        // Compara y actualiza los campos si han cambiado
-        if (!alquilerExistente.getEstado().equals(alquilerDTO.getEstado())) {
-            alquilerExistente.setEstado(alquilerDTO.getEstado());
-            haCambiado = true;
+    
+        // Actualizar el alquiler y obtener el DTO actualizado
+        try {
+            AlquilerDTO alquilerActualizado = alquilerServicio.update(alquilerDTO);
+            return ResponseEntity.ok(alquilerActualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(null); // Bad Request con cuerpo nulo
+        } catch (ResourceNotFound e) {
+            return ResponseEntity.status(404).body(null); // Not Found con cuerpo nulo
         }
-
-        if (!alquilerExistente.getFechaInicio().equals(alquilerDTO.getFechaInicio())) {
-            alquilerExistente.setFechaInicio(alquilerDTO.getFechaInicio());
-            haCambiado = true;
-        }
-
-        if (!alquilerExistente.getFechaFin().equals(alquilerDTO.getFechaFin())) {
-            alquilerExistente.setFechaFin(alquilerDTO.getFechaFin());
-            haCambiado = true;
-        }
-
-        if ((alquilerExistente.getComentarios() == null && alquilerDTO.getComentarios() != null) ||
-            (alquilerExistente.getComentarios() != null && !alquilerExistente.getComentarios().equals(alquilerDTO.getComentarios()))) {
-            alquilerExistente.setComentarios(alquilerDTO.getComentarios());
-            haCambiado = true;
-        }
-
-        // Guardar solo si ha habido cambios
-        if (haCambiado) {
-            alquilerServicio.update(alquilerExistente);
-        }
-
-        // Retornar el alquiler actualizado
-        return ResponseEntity.ok(alquilerExistente);
     }
-
+    
 
 
     @DeleteMapping("/{id}")
@@ -192,4 +168,41 @@ public class AlquilerControlador {
             throw new ResourceNotFound(NOT_FOUND_MESSAGE  + id);
         }
     }
+
+    @PutMapping("/{id}/aprobar")
+    public ResponseEntity<AlquilerDTO> aprobarAlquiler(
+            Authentication authentication, 
+            @PathVariable Long id, 
+            @RequestBody AlquilerDTO alquilerDTO) {
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            AlquilerDTO alquilerActualizado = alquilerServicio.aprobarAlquiler(id);
+            return ResponseEntity.ok(alquilerActualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/{id}/rechazar")
+    public ResponseEntity<AlquilerDTO> rechazarAlquiler(
+            Authentication authentication, 
+            @PathVariable Long id, 
+            @RequestBody AlquilerDTO alquilerDTO) {
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            AlquilerDTO alquilerActualizado = alquilerServicio.rechazarAlquiler(id);
+            return ResponseEntity.ok(alquilerActualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

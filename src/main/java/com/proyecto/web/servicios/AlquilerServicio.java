@@ -10,6 +10,7 @@ import com.proyecto.web.repositorios.PropiedadRepositorio;
 import com.proyecto.web.repositorios.UsuarioRepositorio;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -89,11 +90,6 @@ public class AlquilerServicio {
         Propiedad propiedad = propiedadRepo.findById(alquilerDTO.getPropiedad().getId())
                 .orElseThrow(() -> new IllegalArgumentException("La propiedad no existe: " + alquilerDTO.getPropiedad().getId()));
 
-        // Verificar si la propiedad está disponible
-        /*if (!propiedad.isDisponible()) {
-            throw new IllegalArgumentException("La propiedad no está disponible para alquiler: " + propiedad.getId());
-        }*/
-
         propiedad.setDisponible(false);
         propiedadRepo.save(propiedad); // Guarda la propiedad actualizada
 
@@ -158,5 +154,42 @@ public class AlquilerServicio {
 
     public void deleteById(Long id) {
         alquilerRepo.deleteById(id);
+    }
+
+    @Transactional
+    public AlquilerDTO aprobarAlquiler(Long alquilerId) {
+        Alquiler alquiler = alquilerRepo.findById(alquilerId)
+                .orElseThrow(() -> new IllegalArgumentException("Alquiler no encontrado"));
+
+        Propiedad propiedad = alquiler.getPropiedad();
+
+        List<Alquiler> alquilesPendientes = alquilerRepo.findByPropiedad_Id(propiedad.getId())
+                .stream()
+                .filter(a -> a.getEstado() == EstadoAlquiler.PENDIENTE)
+                .collect(Collectors.toList());
+
+        alquilesPendientes.stream()
+                .filter(a -> !a.getId().equals(alquilerId))
+                .forEach(a -> {
+                    a.setEstado(EstadoAlquiler.RECHAZADO);
+                    alquilerRepo.save(a);
+                });
+
+        alquiler.setEstado(EstadoAlquiler.APROBADO);
+        propiedad.setDisponible(false);
+        propiedadRepo.save(propiedad);
+        
+        Alquiler alquilerActualizado = alquilerRepo.save(alquiler);
+        return modelMapper.map(alquilerActualizado, AlquilerDTO.class);
+    }
+
+    @Transactional
+    public AlquilerDTO rechazarAlquiler(Long alquilerId) {
+        Alquiler alquiler = alquilerRepo.findById(alquilerId)
+                .orElseThrow(() -> new IllegalArgumentException("Alquiler no encontrado"));
+
+        alquiler.setEstado(EstadoAlquiler.RECHAZADO);
+        Alquiler alquilerActualizado = alquilerRepo.save(alquiler);
+        return modelMapper.map(alquilerActualizado, AlquilerDTO.class);
     }
 }
