@@ -43,14 +43,17 @@ public class SecurityConfig {
     }
 
 
-     @Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> corsConfigurationSource())
                 .authorizeHttpRequests(request -> {
+                    // Permitir el acceso a las rutas de autenticación
+                    request.requestMatchers("/login", "/auth/**").permitAll();
+                    // Permitir acceso público a /api/**
                     request.requestMatchers("/api/**").permitAll();
-
+                    // Requiere autenticación para otras rutas
                     request.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -58,6 +61,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 
     @Bean
     PasswordEncoder passwordEncoder(){
