@@ -13,8 +13,9 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://arriendatufinca.com")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedOrigins("/api/auth/login")
+                        .allowedOrigins("/api/auth/register")
+                        .allowedMethods( "POST")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
