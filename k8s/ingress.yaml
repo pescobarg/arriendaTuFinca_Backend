@@ -3,16 +3,18 @@ kind: Ingress
 metadata:
   name: arrienda-back
   namespace: back
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-   ingressClassName: nginx
-   rules:
-   - host: 
-     http:
-       paths:
-       - path: /api
-         pathType: Prefix
-         backend:
-           service:
-             name: arrienda-back
-             port:
-               number: 8080
+  ingressClassName: nginx
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: arrienda-back
+            port:
+              number: 8080
