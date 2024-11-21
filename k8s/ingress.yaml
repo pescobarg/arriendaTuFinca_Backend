@@ -1,17 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: arrienda-back
-  namespace: back
+  name: arrienda-back-ingress
+  namespace: ingress-nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx
   rules:
   - host: localhost
     http:
       paths:
-      - path: /api
+      - path: /api/
         pathType: Prefix
         backend:
           service:
