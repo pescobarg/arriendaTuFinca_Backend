@@ -1,7 +1,7 @@
-FROM openjdk:17
+FROM openjdk:17-alpine
 
 # Instala Maven
-RUN apt-get update && apt-get install -y maven
+RUN apk add --no-cache maven
 
 # Copia el código fuente de la aplicación a la imagen
 COPY . /app
