@@ -23,7 +23,7 @@ import com.proyecto.web.servicios.UsuarioServicio;
 
 @RestController
 @RequestMapping("/api/propiedades")
-@CrossOrigin(origins = "http://127.0.0.1")
+@CrossOrigin(origins = "http://arriendatufinca.com")
 public class PropiedadControlador {
 
     private final PropiedadServicio propiedadServicio;

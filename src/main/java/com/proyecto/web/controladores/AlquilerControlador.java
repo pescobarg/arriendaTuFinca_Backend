@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://127.0.0.1")
+@CrossOrigin(origins = "http://arriendatufinca.com")
 @RestController
 @RequestMapping("/api/alquileres")
 public class AlquilerControlador {
