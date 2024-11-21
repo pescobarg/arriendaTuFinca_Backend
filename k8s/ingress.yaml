@@ -4,7 +4,7 @@ metadata:
   name: arrienda-back
   namespace: back
 spec:
-   ingressClassName: public
+   ingressClassName: nginx
    rules:
    - host: 
      http:
